@@ -1,13 +1,13 @@
 # Package options.
 NAME        := go-php
 DESCRIPTION := PHP bindings for the Go programming language
-IMPORT_PATH := github.com/deuill/$(NAME)
+IMPORT_PATH := github.com/sailenicolas/$(NAME)
 VERSION     := $(shell git describe --tags --always --dirty="-dev")
 
 # Generic build options.
-PHP_VERSION    := 7.0.30
+PHP_VERSION    := 8.1.3
 STATIC         := false
-DOCKER_IMAGE   := deuill/$(NAME):$(PHP_VERSION)
+DOCKER_IMAGE   := sailenicolas/$(NAME):$(PHP_VERSION)
 
 # Go build options.
 GO   := go

@@ -1,4 +1,4 @@
-FROM golang:1.10-stretch
+FROM golang:1.17.7-stretch
 
 # The full PHP version to target, i.e. "7.1.10".
 ARG PHP_VERSION
@@ -26,7 +26,7 @@ RUN set -xe && \
     apt-get purge -y --auto-remove -o APT::AutoRemove::RecommendsImportant=false ${FETCH_DEPS}
 
 # Build PHP library from source.
-ENV BUILD_DEPS="build-essential file libpcre3-dev dpkg-dev libcurl4-openssl-dev libedit-dev libsqlite3-dev libssl1.0-dev libxml2-dev zlib1g-dev"
+ENV BUILD_DEPS="build-essential file libpcre3-dev dpkg-dev libcurl4-openssl-dev libedit-dev libsqlite3-dev libssl1.0-dev libxml2-dev zlib1g-dev libonig-dev"
 RUN set -xe && \
     apt-get update && apt-get install -y --no-install-recommends ${BUILD_DEPS}; \
     export CFLAGS="${PHP_CFLAGS}" CPPFLAGS="${PHP_CPPFLAGS}" LDFLAGS="${PHP_LDFLAGS}"; \

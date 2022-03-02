@@ -16,3 +16,5 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - run: make docker-test PHP_VERSION=7.4.28
+      - run: make docker-test PHP_VERSION=5.6
+      - run: make docker-test PHP_VERSION=8.1.3

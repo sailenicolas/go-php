@@ -15,4 +15,4 @@ jobs:
           - ubuntu-18.04
     steps:
       - uses: actions/checkout@v2
-      - run: make docker-test PHP_VERSION=7.4
+      - run: make docker-test PHP_VERSION=7.4.28

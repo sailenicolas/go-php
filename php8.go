@@ -7,6 +7,6 @@
 
 package gophp
 
-// #cgo CFLAGS: -Iinclude/php8
+// #cgo CFLAGS: -Iincludes/php8
 // #cgo LDFLAGS: -lphp8
 import "C"

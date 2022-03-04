@@ -10,7 +10,7 @@ package gophp
 // #cgo CFLAGS: -I/usr/include/php/main
 // #cgo CFLAGS: -I/usr/include/php/TSRM
 // #cgo CFLAGS: -I/usr/include/php/Zend
-// #cgo CFLAGS: -Iinclude/
+// #cgo CFLAGS: -Iincludes/
 // #include <stdlib.h>
 // #include <main/php.h>
 // #include "receiver.h"

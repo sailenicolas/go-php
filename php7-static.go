@@ -2,9 +2,10 @@
 // Use of this source code is governed by the MIT license that can be found in
 // the LICENSE file.
 //
+//go:build static
 // +build static
 
-package php
+package gophp
 
 // #cgo LDFLAGS: -ldl -lm -lcurl -lpcre -lssl -lcrypto -lresolv -ledit -lz -lxml2
 import "C"

@@ -2,11 +2,11 @@
 // Use of this source code is governed by the MIT license that can be found in
 // the LICENSE file.
 //
-//go:build !php5 && !php7
-// +build !php5,!php7
+//go:build !php7
+// +build !php7
 
-package php
+package gophp
 
-// #cgo CFLAGS: -Iinclude/php8 -Isrc/php8
+// #cgo CFLAGS: -Iinclude/php8
 // #cgo LDFLAGS: -lphp8
 import "C"

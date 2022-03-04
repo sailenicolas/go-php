@@ -88,7 +88,7 @@ static void receiver_new(INTERNAL_FUNCTION_PARAMETERS) {
 
 	if (zend_copy_parameters_array(ZEND_NUM_ARGS(), &args) == FAILURE) {
 		zend_throw_exception(NULL, "Could not parse parameters for method receiver", 0);
-	} else {	
+	} else {
 		// Create receiver instance. Throws an exception if creation fails.
 		int result = engineReceiverNew(this, (void *) &args);
 		if (result != 0) {

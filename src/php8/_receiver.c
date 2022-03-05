@@ -2,20 +2,20 @@
 // Use of this source code is governed by the MIT license that can be found in
 // the LICENSE file.
 
-static zval *_receiver_get(zval *object, zval *member, int type, void **cache_slot, zval *retval) {
-	engine_value *result = receiver_get(object, member);
+static zval *_receiver_get(zend_object *object, zend_string *member, int type, void **cache_slot, zval *rv) {
+	engine_value *result = receiver_get(object, Z_OBJ_P(member));
 	if (result == NULL) {
-		ZVAL_NULL(retval);
-		return retval;
+		ZVAL_NULL(rv);
+		return rv;
 	}
 
-	value_copy(retval, result->internal);
+	value_copy(rv, result->internal);
 	_value_destroy(result);
 
-	return retval;
+	return rv;
 }
 
-static void _receiver_set(zval *object, zval *member, zval *value, void **cache_slot) {
+static void _receiver_set(zend_object *object, zend_string *member, zval *value, void **cache_slot) {
 	receiver_set(object, member, value);
 }
 

@@ -177,10 +177,10 @@ zend_object_get_properties_for_t		get_properties_for   /* optional /
 
 	memcpy(&receiver_handlers, &std_object_handlers, sizeof(receiver_handlers));
 	receiver_handlers.get_method = _receiver_method_get;
-	//receiver_handlers.read_property = _receiver_get;
-	//receiver_handlers.write_property = _receiver_set;
-	//receiver_handlers.has_dimension = _receiver_exists;
-	//receiver_handlers.get_constructor = _receiver_constructor_get;
+	receiver_handlers.read_property = _receiver_get;
+	receiver_handlers.write_property = _receiver_set;
+	receiver_handlers.has_dimension = _receiver_exists;
+	receiver_handlers.get_constructor = _receiver_constructor_get;
 	//receiver_handlers.call_method = _receiver_method_call;
 	// Set standard handlers for receiver.
 	receiver_handlers.free_obj = _receiver_free;

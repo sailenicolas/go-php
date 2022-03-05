@@ -5,8 +5,8 @@
 #ifndef ___RECEIVER_H___
 #define ___RECEIVER_H___
 
-static zval *_receiver_get(zval *object, zval *member, int type, void **cache_slot, zval *retval);
-static void _receiver_set(zval *object, zval *member, zval *value, void **cache_slot);
+static zval * _receiver_get(zend_object *object, zend_string *member, int type, void **cache_slot, zval *rv);
+static void _receiver_set(zend_object *object, zend_string *member, zval *value, void **cache_slot);
 static int _receiver_exists(zval *object, zval *member, int check, void **cache_slot);
 
 static int _receiver_method_call(zend_string *method, zend_object *object, INTERNAL_FUNCTION_PARAMETERS);

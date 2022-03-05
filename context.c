@@ -44,8 +44,7 @@ void context_exec(engine_context *context, char *filename) {
 		zend_file_handle script;
 
 		script.type = ZEND_HANDLE_FILENAME;
-		size_t file_len = strlen(filename);
-		script.filename = zend_string_init(filename, file_len, 0);
+		script.filename = zend_string_init(filename, strlen(filename), 0);
 		script.opened_path = NULL;
 		ret = php_execute_script(&script);
 	} zend_catch {

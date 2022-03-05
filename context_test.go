@@ -173,7 +173,7 @@ var logTests = []struct {
 }{
 	{
 		"$a = 10; $a + $b;",
-		"Undefined variable: b in gophp-engine on line 1",
+		"PHP Warning:  Undefined variable $b in gophp-engine on line 1",
 	},
 	{
 		"strlen();",

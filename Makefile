@@ -1,13 +1,13 @@
 # Package options.
-NAME        := gophp
+NAME        := go-php
 DESCRIPTION := PHP bindings for the Go programming language
-IMPORT_PATH := github.com/sailenicolas/$(NAME)
+IMPORT_PATH := github.com/deuill/$(NAME)
 VERSION     := $(shell git describe --tags --always --dirty="-dev")
 
 # Generic build options.
 PHP_VERSION    := 8.1.3
 STATIC         := false
-DOCKER_IMAGE   := sailenicolas/$(NAME):$(PHP_VERSION)
+DOCKER_IMAGE   := deuill/$(NAME):$(PHP_VERSION)
 
 # Go build options.
 GO   := go
@@ -30,6 +30,8 @@ build: .build/env/GOPATH/.ok
 ## Run test for all local packages or specified PACKAGE.
 test: .build/env/GOPATH/.ok
 	@echo "Running tests for '$(NAME)'..."
+	@echo "Running tests for '$(TAGS)'..."
+	@echo "Running tests for '$(PACKAGE)'..."
 	$Q $(GO) test -race $(if $(VERBOSE),-v) $(TAGS) $(if $(PACKAGE),$(PACKAGE),$(PACKAGES))
 	@echo "Running 'vet' for '$(NAME)'..."
 	$Q $(GO) vet $(if $(VERBOSE),-v) $(TAGS) $(if $(PACKAGE),$(PACKAGE),$(PACKAGES))

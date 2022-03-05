@@ -76,24 +76,18 @@ static void engine_log_message(char *str, int syslog_type_int) {
 static sapi_module_struct engine_module = {
 	"gophp-engine",              // Name
 	"Go PHP Engine Library",     // Pretty Name
-
 	NULL,                        // Startup
 	php_module_shutdown_wrapper, // Shutdown
-
 	NULL,                        // Activate
 	NULL,                        // Deactivate
-
 	_engine_ub_write,            // Unbuffered Write
 	NULL,                        // Flush
 	NULL,                        // Get UID
 	NULL,                        // Getenv
-
 	php_error,                   // Error Handler
-
 	engine_header_handler,       // Header Handler
 	NULL,                        // Send Headers Handler
 	engine_send_header,          // Send Header Handler
-
 	NULL,                        // Read POST Data
 	engine_read_cookies,         // Read Cookies
 

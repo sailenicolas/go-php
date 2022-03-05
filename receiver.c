@@ -104,7 +104,7 @@ static void receiver_new(INTERNAL_FUNCTION_PARAMETERS) {
 static zend_internal_function *receiver_method_get(zend_object *object) {
 	zend_internal_function *func = emalloc(sizeof(zend_internal_function));
 
-	func->type     = ZEND_OVERLOADED_FUNCTION;
+	func->type     = ZEND_INTERNAL_FUNCTION;
 	func->handler  = NULL;
 	func->arg_info = NULL;
 	func->num_args = 0;
@@ -130,34 +130,8 @@ static zend_internal_function *receiver_constructor_get(zend_object *object) {
 
 	return &func;
 }
+static zend_object_handlers receiver_handlers;
 
-// Table of handler functions for method receivers.
-static zend_object_handlers receiver_handlers = {
-	ZEND_OBJECTS_STORE_HANDLERS,
-
-	_receiver_get,           // read_property
-	_receiver_set,           // write_property
-	NULL,                    // read_dimension
-	NULL,                    // write_dimension
-
-	NULL,                    // get_property_ptr_ptr
-	NULL,                    // get
-	NULL,                    // set
-
-	_receiver_exists,        // has_property
-	NULL,                    // unset_property
-	NULL,                    // has_dimension
-	NULL,                    // unset_dimension
-
-	NULL,                    // get_properties
-
-	_receiver_method_get,     // get_method
-	_receiver_method_call,    // call_method
-
-	_receiver_constructor_get // get_constructor
-};
-
-// Define class with unique name.
 void receiver_define(char *name) {
 	zend_class_entry tmp;
 	INIT_CLASS_ENTRY_EX(tmp, name, strlen(name), NULL);
@@ -167,6 +141,47 @@ void receiver_define(char *name) {
 	this->create_object = _receiver_init;
 	this->ce_flags |= ZEND_ACC_FINAL;
 
+/* Table of handler functions for method receivers.
+static zend_object_handlers receiver_handlers = {
+MACRO_INT,
+free_obj,
+zend_object_dtor_obj_t,
+zend_object_clone_obj_t,
+_receiver_get,
+_receiver_set,
+read_dimension,
+zend_object_write_dimension_t			write_dimension,
+zend_object_get_property_ptr_ptr_t		get_property_ptr_ptr, /* required /
+zend_object_get_t						get,                  /* optional /
+zend_object_set_t						set,                  /* optional /
+zend_object_has_property_t				_receiver_exists,         /* requied /
+zend_object_unset_property_t			unset_property,       /* required /
+zend_object_has_dimension_t				has_dimension,       /* required /
+zend_object_unset_dimension_t			unset_dimension,      /* required /
+zend_object_get_properties_t			get_properties,       /* required /
+zend_object_get_method_t				_receiver_method_get,           /* required /
+zend_object_call_method_t				_receiver_method_call,          /* optional /
+zend_object_get_constructor_t			get_constructor,      /* required /
+zend_object_get_class_name_t			get_class_name,       /* required /
+zend_object_compare_t					compare_objects,      /* optional /
+zend_object_cast_t						cast_object,         /* optional /
+zend_object_count_elements_t			count_elements,       /* optional /
+zend_object_get_debug_info_t			get_debug_info,       /* optional /
+zend_object_get_closure_t				get_closure,          /* optional /
+zend_object_get_gc_t					get_gc,               /* required /
+zend_object_do_operation_t				do_operation,         /* optional /
+zend_object_compare_zvals_t				compare,              /* optional /
+zend_object_get_properties_for_t		get_properties_for   /* optional /
+ };
+*/
+
+	memcpy(&receiver_handlers, &std_object_handlers, sizeof(receiver_handlers));
+	receiver_handlers.get_method = _receiver_method_get;
+	//receiver_handlers.read_property = _receiver_get;
+	//receiver_handlers.write_property = _receiver_set;
+	//receiver_handlers.has_dimension = _receiver_exists;
+	//receiver_handlers.get_constructor = _receiver_constructor_get;
+	//receiver_handlers.call_method = _receiver_method_call;
 	// Set standard handlers for receiver.
 	_receiver_handlers_set(&receiver_handlers);
 }

@@ -5,7 +5,7 @@
 //go:build static
 // +build static
 
-package gophp
+package php
 
 // #cgo LDFLAGS: -ldl -lm -lcurl -lpcre -lssl -lcrypto -lresolv -ledit -lz -lxml2
 import "C"

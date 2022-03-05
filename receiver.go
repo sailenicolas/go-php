@@ -2,13 +2,10 @@
 // Use of this source code is governed by the MIT license that can be found in
 // the LICENSE file.
 
-package gophp
+package php
 
-// #cgo CFLAGS: -I/usr/include/php
-// #cgo CFLAGS: -I/usr/include/php/main
-// #cgo CFLAGS: -I/usr/include/php/TSRM
-// #cgo CFLAGS: -I/usr/include/php/Zend
-// #cgo CFLAGS: -Iincludes
+// #cgo CFLAGS: -I/usr/include/php -I/usr/include/php/main -I/usr/include/php/TSRM
+// #cgo CFLAGS: -I/usr/include/php/Zend -Iinclude
 //
 // #include <stdlib.h>
 // #include <main/php.h>

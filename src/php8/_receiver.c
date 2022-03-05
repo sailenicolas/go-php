@@ -76,7 +76,7 @@ static engine_receiver *_receiver_this(zval *object) {
 }
 
 static void _receiver_handlers_set(zend_object_handlers *handlers) {
-	zend_object_handlers *std = zend_get_std_object_handlers();
+	zend_object_handlers * std = zend_get_std_object_handlers();
 
 	handlers->get_class_name  = std->get_class_name;
 	handlers->free_obj = _receiver_free;

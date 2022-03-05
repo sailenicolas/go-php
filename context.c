@@ -4,7 +4,7 @@
 
 #include <errno.h>
 #include <stdbool.h>
-
+#include <string.h> // correct header
 #include <main/php.h>
 #include <main/php_main.h>
 
@@ -44,9 +44,9 @@ void context_exec(engine_context *context, char *filename) {
 		zend_file_handle script;
 
 		script.type = ZEND_HANDLE_FILENAME;
-		script.filename = filename;
+		size_t file_len = strlen(filename);
+		script.filename = zend_string_init(filename, file_len, 0);
 		script.opened_path = NULL;
-
 		ret = php_execute_script(&script);
 	} zend_catch {
 		errno = 1;
@@ -63,8 +63,8 @@ void context_exec(engine_context *context, char *filename) {
 }
 
 void *context_eval(engine_context *context, char *script) {
-	zval *str = _value_init();
-	_value_set_string(&str, script);
+	zend_string *str;
+	str = zend_string_init(script, strlen(script), 0);
 
 	// Compile script value.
 	uint32_t compiler_options = CG(compiler_options);
@@ -73,8 +73,7 @@ void *context_eval(engine_context *context, char *script) {
 	zend_op_array *op = zend_compile_string(str, "gophp-engine");
 	CG(compiler_options) = compiler_options;
 
-	zval_dtor(str);
-
+	zend_string_release(str);
 	// Return error if script failed to compile.
 	if (!op) {
 		errno = 1;

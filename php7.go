@@ -5,12 +5,8 @@
 //go:build php7
 // +build php7
 
-package gophp
+package php
 
-// #cgo CFLAGS: -I/usr/include/php
-// #cgo CFLAGS: -I/usr/include/php/main
-// #cgo CFLAGS: -I/usr/include/php/TSRM
-// #cgo CFLAGS: -I/usr/include/php/Zend
-// #cgo CFLAGS: -Iincludes/php7
+// #cgo CFLAGS: -Iinclude/php7 -Isrc/php7
 // #cgo LDFLAGS: -lphp7
 import "C"

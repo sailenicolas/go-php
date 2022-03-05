@@ -210,21 +210,19 @@ bool value_get_bool(engine_value *val) {
 char *value_get_string(engine_value *val) {
 	zval tmp;
 	int result;
-
 	switch (val->kind) {
 	case KIND_STRING:
 		value_copy(&tmp, val->internal);
 		break;
 	case KIND_OBJECT:
-		result = zend_std_cast_object_tostring(val->internal, &tmp, IS_STRING);
+		result = zend_std_cast_object_tostring(Z_OBJ_P(val->internal), &tmp, IS_STRING);
 		if (result == FAILURE) {
 			ZVAL_EMPTY_STRING(&tmp);
 		}
-
 		break;
 	default:
 		value_copy(&tmp, val->internal);
-		convert_to_cstring(&tmp);
+		convert_to_string(&tmp);
 	}
 
 	int len = Z_STRLEN(tmp) + 1;

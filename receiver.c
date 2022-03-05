@@ -183,7 +183,7 @@ zend_object_get_properties_for_t		get_properties_for   /* optional /
 	//receiver_handlers.get_constructor = _receiver_constructor_get;
 	//receiver_handlers.call_method = _receiver_method_call;
 	// Set standard handlers for receiver.
-	_receiver_handlers_set(&receiver_handlers);
+	receiver_handlers.free_obj = _receiver_free;
 }
 
 void receiver_destroy(char *name) {

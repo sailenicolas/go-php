@@ -1,7 +1,7 @@
 # Package options.
-NAME        := go-php
+NAME        := gophp
 DESCRIPTION := PHP bindings for the Go programming language
-IMPORT_PATH := github.com/deuill/$(NAME)
+IMPORT_PATH := github.com/sailenicolas/$(NAME)
 VERSION     := $(shell git describe --tags --always --dirty="-dev")
 
 # Generic build options.
@@ -11,7 +11,7 @@ DOCKER_IMAGE   := deuill/$(NAME):$(PHP_VERSION)
 
 # Go build options.
 GO   := go
-TAGS := -tags 'php$(word 1,$(subst ., ,$(PHP_VERSION))) $(if $(findstring true,$(STATIC)),static)'
+TAGS := -tags 'php$(word 1,$(subst ., ,$(PHP_VERSION))) $(if $(findstring true,$(STATIC)),static) debian'
 
 # Install options.
 PREFIX := /usr
@@ -31,7 +31,7 @@ build: .build/env/GOPATH/.ok
 test: .build/env/GOPATH/.ok
 	@echo "Running tests for '$(NAME)'..."
 	@echo "Running tests for '$(TAGS)'..."
-	@echo "Running tests for '$(PACKAGE)'..."
+	@echo "Running tests for '$(word 1,$(subst ., ,$(PHP_VERSION)))'..."
 	$Q $(GO) test -race $(if $(VERBOSE),-v) $(TAGS) $(if $(PACKAGE),$(PACKAGE),$(PACKAGES))
 	@echo "Running 'vet' for '$(NAME)'..."
 	$Q $(GO) vet $(if $(VERBOSE),-v) $(TAGS) $(if $(PACKAGE),$(PACKAGE),$(PACKAGES))

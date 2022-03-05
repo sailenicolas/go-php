@@ -5,7 +5,7 @@
 //go:build php7
 // +build php7
 
-package php
+package gophp
 
 // #cgo CFLAGS: -Iinclude/php7 -Isrc/php7
 // #cgo LDFLAGS: -lphp7

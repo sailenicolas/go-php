@@ -75,13 +75,6 @@ static engine_receiver *_receiver_this(zval *object) {
 	return (engine_receiver *) Z_OBJ_P(object);
 }
 
-static void _receiver_handlers_set(zend_object_handlers *handlers) {
-	zend_object_handlers * std = zend_get_std_object_handlers();
-
-	handlers->get_class_name  = std->get_class_name;
-	handlers->free_obj = _receiver_free;
-}
-
 // Return class name for method receiver.
 char *_receiver_get_name(engine_receiver *rcvr) {
 	return rcvr->obj.ce->name->val;

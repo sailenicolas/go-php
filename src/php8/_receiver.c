@@ -3,7 +3,7 @@
 // the LICENSE file.
 
 static zval *_receiver_get(zend_object *object, zend_string *member, int type, void **cache_slot, zval *rv) {
-	engine_value *result = receiver_get(object, Z_OBJ_P(member));
+	engine_value *result = receiver_get(object, member);
 	if (result == NULL) {
 		ZVAL_NULL(rv);
 		return rv;
@@ -15,12 +15,12 @@ static zval *_receiver_get(zend_object *object, zend_string *member, int type, v
 	return rv;
 }
 
-static void _receiver_set(zend_object *object, zend_string *member, zval *value, void **cache_slot) {
+static zval * _receiver_set(zend_object *object, zend_string *member, zval *value, void **cache_slot) {
 	receiver_set(object, member, value);
 }
 
-static int _receiver_exists(zval *object, zval *member, int check, void **cache_slot) {
-	return receiver_exists(object, member, check);
+static int _receiver_exists(zend_object *object, zend_string *member, int has_set_exists, void **cache_slot) {
+	return receiver_exists(object, member, has_set_exists);
 }
 
 static int _receiver_method_call(zend_string *method, zend_object *object, INTERNAL_FUNCTION_PARAMETERS) {
@@ -71,8 +71,8 @@ static void _receiver_destroy(char *name) {
 	}
 }
 
-static engine_receiver *_receiver_this(zval *object) {
-	return (engine_receiver *) Z_OBJ_P(object);
+static engine_receiver *_receiver_this(zend_object *object) {
+	return (engine_receiver *) object;
 }
 
 // Return class name for method receiver.

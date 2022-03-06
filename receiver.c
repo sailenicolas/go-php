@@ -14,22 +14,22 @@
 #include "_cgo_export.h"
 
 // Fetch and return field for method receiver.
-static engine_value *receiver_get(zval *object, zval *member) {
+static engine_value *receiver_get(zend_object *object, zend_string *member) {
 	engine_receiver *this = _receiver_this(object);
-	return engineReceiverGet(this, Z_STRVAL_P(member));
+	return engineReceiverGet(this, ZSTR_VAL(member));
 }
 
 // Set field for method receiver.
-static void receiver_set(zval *object, zval *member, zval *value) {
+static zval * receiver_set(zend_object *object, zend_string *member, zval *value) {
 	engine_receiver *this = _receiver_this(object);
-	engineReceiverSet(this, Z_STRVAL_P(member), (void *) value);
+	engineReceiverSet(this, ZSTR_VAL(member), (void *) value);
 }
 
 // Check if field exists for method receiver.
-static int receiver_exists(zval *object, zval *member, int check) {
+static int receiver_exists(zend_object *object, zend_string *member, int check) {
 	engine_receiver *this = _receiver_this(object);
 
-	if (!engineReceiverExists(this, Z_STRVAL_P(member))) {
+	if (!engineReceiverExists(this, ZSTR_VAL(member))) {
 		// Value does not exist.
 		return 0;
 	} else if (check == 2) {
@@ -38,7 +38,7 @@ static int receiver_exists(zval *object, zval *member, int check) {
 	}
 
 	int result = 0;
-	engine_value *val = engineReceiverGet(this, Z_STRVAL_P(member));
+	engine_value *val = engineReceiverGet(this, ZSTR_VAL(member));
 
 	if (check == 1) {
 		// Value exists and is "truthy".
@@ -59,7 +59,7 @@ static int receiver_exists(zval *object, zval *member, int check) {
 // Call function with arguments passed and return value (if any).
 static int receiver_method_call(char *name, INTERNAL_FUNCTION_PARAMETERS) {
 	zval args;
-	engine_receiver *this = _receiver_this(getThis());
+	engine_receiver *this = _receiver_this(Z_OBJ_P(ZEND_THIS));
 
 	array_init_size(&args, ZEND_NUM_ARGS());
 
@@ -78,11 +78,12 @@ static int receiver_method_call(char *name, INTERNAL_FUNCTION_PARAMETERS) {
 	zval_dtor(&args);
 }
 
+
 // Create new method receiver instance and attach to instantiated PHP object.
 // Returns an exception if method receiver failed to initialize for any reason.
 static void receiver_new(INTERNAL_FUNCTION_PARAMETERS) {
 	zval args;
-	engine_receiver *this = _receiver_this(getThis());
+	engine_receiver *this = _receiver_this(Z_OBJ_P(ZEND_THIS));
 
 	array_init_size(&args, ZEND_NUM_ARGS());
 
@@ -179,7 +180,7 @@ zend_object_get_properties_for_t		get_properties_for   /* optional /
 	receiver_handlers.get_method = _receiver_method_get;
 	receiver_handlers.read_property = _receiver_get;
 	receiver_handlers.write_property = _receiver_set;
-	receiver_handlers.has_dimension = _receiver_exists;
+	receiver_handlers.has_property = _receiver_exists;
 	receiver_handlers.get_constructor = _receiver_constructor_get;
 	//receiver_handlers.call_method = _receiver_method_call;
 	// Set standard handlers for receiver.

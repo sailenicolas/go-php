@@ -161,8 +161,8 @@ func NewValueFromPtr(val unsafe.Pointer) (*Value, error) {
 		return nil, fmt.Errorf("unable to create new PHP value")
 	}
 
-	if _, err := C.value_set_zval(ptr, (*C.zval)(val)); err != nil {
-		return nil, fmt.Errorf("unable to set PHP value from pointer")
+	if _, errr := C.value_set_zval(ptr, (*C.zval)(val)); errr != nil {
+		return nil, fmt.Errorf("unable to set PHP value from pointer " + errr.Error())
 	}
 
 	return &Value{value: ptr}, nil

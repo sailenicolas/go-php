@@ -3,7 +3,7 @@
 // the LICENSE file.
 
 zval *_value_init() {
-	zval tmp = malloc(sizeof(zval));
+	zval *tmp;
 	ZVAL_NULL(tmp);
 
 	return tmp;

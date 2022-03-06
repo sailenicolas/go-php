@@ -4,8 +4,7 @@
 
 package gophp
 
-// #cgo CFLAGS: -I/usr/include/php -I/usr/include/php/main -I/usr/include/php/TSRM
-// #cgo CFLAGS: -I/usr/include/php/Zend -Iinclude
+// #cgo CFLAGS: -Iinclude
 //
 // #include <stdlib.h>
 // #include <main/php.h>

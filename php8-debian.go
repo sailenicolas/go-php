@@ -12,7 +12,7 @@
 
 package gophp
 
-// #cgo CFLAGS: -I/usr/include/php/20210902 -Iinclude/php8 -Isrc/php8
+// #cgo CFLAGS: -I/usr/include/php/20210902 -Isrc/php8
 // #cgo CFLAGS: -I/usr/include/php/20210902/main -I/usr/include/php/20210902/Zend
 // #cgo CFLAGS: -I/usr/include/php/20210902/TSRM
 // #cgo LDFLAGS: -lphp8

@@ -59,7 +59,7 @@ static int receiver_exists(zend_object *object, zend_string *member, int check) 
 // Call function with arguments passed and return value (if any).
 static int receiver_method_call(char *name, INTERNAL_FUNCTION_PARAMETERS) {
 	zval args;
-	engine_receiver *this = _receiver_this(Z_OBJ_P(ZEND_THIS));
+	engine_receiver *this = _receiver_this(Z_OBJ_P(getThis()));
 
 	array_init_size(&args, ZEND_NUM_ARGS());
 
@@ -132,59 +132,60 @@ static zend_internal_function *receiver_constructor_get(zend_object *object) {
 	return &func;
 }
 static zend_object_handlers receiver_handlers;
+/*
+ 	memcpy(&receiver_handlers, &std_object_handlers, sizeof(std_object_handlers));
+	receiver_handlers.offset  = 0;
+	receiver_handlers.get_method = _receiver_method_get;
+	receiver_handlers.read_property = _receiver_get;
+	receiver_handlers.write_property = _receiver_set;
+	receiver_handlers.has_property = _receiver_exists;
+	receiver_handlers.get_constructor = _receiver_constructor_get;
+
+static zend_object_handlers receiver_handlers = 	{
+/* offset of real object header (usually zero)
+0, 								object handlers 			/
+NULL,           				free_obj;             required
+NULL,           				dtor_obj;             required
+NULL,          					clone_obj;            optional
+_receiver_get,      			read_property;        required
+_receiver_set,     				write_property;       required
+NULL,							read_dimension;       required
+NULL,    						write_dimension;      required
+NULL, 							get_property_ptr_ptr; required
+_receiver_exists,   			has_property;         required
+NULL,     						unset_property;       required
+NULL,      						has_dimension;        required
+NULL,    						unset_dimension;      required
+NULL,    						get_properties;       required
+_receiver_method_get,  			get_method;           required
+_receiver_constructor_get,		get_constructor;      required
+NULL,    						get_class_name;       required
+NULL,    						cast_object;          required
+NULL,    						count_elements;       optional
+NULL,    						get_debug_info;       optional
+NULL,    						get_closure;          optional
+NULL,    						get_gc;               required
+NULL,    						do_operation;         optional
+NULL,    						compare;              required
+NULL 							get_properties_for;   optional
+};
+*/
 
 void receiver_define(char *name) {
 	zend_class_entry tmp;
 	INIT_CLASS_ENTRY_EX(tmp, name, strlen(name), NULL);
 
 	zend_class_entry *this = zend_register_internal_class(&tmp);
-
-	this->create_object = _receiver_init;
+   	this->create_object = _receiver_init;
 	this->ce_flags |= ZEND_ACC_FINAL;
-
-/* Table of handler functions for method receivers.
-static zend_object_handlers receiver_handlers = {
-MACRO_INT,
-free_obj,
-zend_object_dtor_obj_t,
-zend_object_clone_obj_t,
-_receiver_get,
-_receiver_set,
-read_dimension,
-zend_object_write_dimension_t			write_dimension,
-zend_object_get_property_ptr_ptr_t		get_property_ptr_ptr, /* required /
-zend_object_get_t						get,                  /* optional /
-zend_object_set_t						set,                  /* optional /
-zend_object_has_property_t				_receiver_exists,         /* requied /
-zend_object_unset_property_t			unset_property,       /* required /
-zend_object_has_dimension_t				has_dimension,       /* required /
-zend_object_unset_dimension_t			unset_dimension,      /* required /
-zend_object_get_properties_t			get_properties,       /* required /
-zend_object_get_method_t				_receiver_method_get,           /* required /
-zend_object_call_method_t				_receiver_method_call,          /* optional /
-zend_object_get_constructor_t			get_constructor,      /* required /
-zend_object_get_class_name_t			get_class_name,       /* required /
-zend_object_compare_t					compare_objects,      /* optional /
-zend_object_cast_t						cast_object,         /* optional /
-zend_object_count_elements_t			count_elements,       /* optional /
-zend_object_get_debug_info_t			get_debug_info,       /* optional /
-zend_object_get_closure_t				get_closure,          /* optional /
-zend_object_get_gc_t					get_gc,               /* required /
-zend_object_do_operation_t				do_operation,         /* optional /
-zend_object_compare_zvals_t				compare,              /* optional /
-zend_object_get_properties_for_t		get_properties_for   /* optional /
- };
-*/
-
-	memcpy(&receiver_handlers, &std_object_handlers, sizeof(receiver_handlers));
-	receiver_handlers.get_method = _receiver_method_get;
-	receiver_handlers.read_property = _receiver_get;
-	receiver_handlers.write_property = _receiver_set;
-	receiver_handlers.has_property = _receiver_exists;
-	receiver_handlers.get_constructor = _receiver_constructor_get;
-	//receiver_handlers.call_method = _receiver_method_call;
-	// Set standard handlers for receiver.
-	receiver_handlers.free_obj = _receiver_free;
+	memcpy(&receiver_handlers, &std_object_handlers, sizeof(std_object_handlers));
+    receiver_handlers.get_method = _receiver_method_get;
+    receiver_handlers.read_property = _receiver_get;
+    receiver_handlers.write_property = _receiver_set;
+    receiver_handlers.has_property = _receiver_exists;
+    receiver_handlers.get_constructor = _receiver_constructor_get;
+    // Set standard handlers for receiver.
+    _receiver_handlers_set(&receiver_handlers);
 }
 
 void receiver_destroy(char *name) {

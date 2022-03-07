@@ -10,15 +10,21 @@
 #include <main/php_main.h>
 #include <main/php_variables.h>
 
+#include "receiver.h"
+
 #include "context.h"
 #include "engine.h"
 #include "_cgo_export.h"
+
 
 // The php.ini defaults for the Go-PHP engine.
 const char engine_ini_defaults[] = {
 	"expose_php = 0\n"
 	"default_mimetype =\n"
 	"html_errors = 0\n"
+	"log_errors = 1\n"
+	"display_errors = 0\n"
+	"error_reporting = E_ALL\n"
 	"register_argc_argv = 1\n"
 	"implicit_flush = 1\n"
 	"output_buffering = 0\n"

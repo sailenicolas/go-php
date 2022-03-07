@@ -42,10 +42,7 @@ void context_exec(engine_context *context, char *filename) {
 	// Attempt to execute script file.
 	zend_first_try {
 		zend_file_handle script;
-
-		script.type = ZEND_HANDLE_FILENAME;
-		script.filename = zend_string_init(filename, strlen(filename), 0);
-		script.opened_path = NULL;
+		zend_stream_init_filename(&script, filename);
 		ret = php_execute_script(&script);
 	} zend_catch {
 		errno = 1;

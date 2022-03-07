@@ -16,7 +16,8 @@ engine_value *value_new() {
 		return NULL;
 	}
 
-	val->internal = _value_init();
+	val->internal = malloc(sizeof(zval));
+	ZVAL_NULL(val->internal);
 	val->kind = KIND_NULL;
 
 	errno = 0;

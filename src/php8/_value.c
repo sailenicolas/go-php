@@ -2,13 +2,6 @@
 // Use of this source code is governed by the MIT license that can be found in
 // the LICENSE file.
 
-zval *_value_init() {
-	zval *tmp;
-	ZVAL_NULL(tmp);
-
-	return tmp;
-}
-
 // Destroy and free engine value.
 void _value_destroy(engine_value *val) {
 	zval_dtor(val->internal);

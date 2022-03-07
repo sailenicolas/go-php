@@ -7,7 +7,7 @@ VERSION     := $(shell git describe --tags --always --dirty="-dev")
 # Generic build options.
 PHP_VERSION    := 8.1.3
 STATIC         := false
-DOCKER_IMAGE   := deuill/$(NAME):$(PHP_VERSION)
+DOCKER_IMAGE   := sailenicolas/$(NAME):$(PHP_VERSION)
 
 # Go build options.
 GO   := go
@@ -32,7 +32,7 @@ test: .build/env/GOPATH/.ok
 	@echo "Running tests for '$(NAME)'..."
 	@echo "Running tests for '$(TAGS)'..."
 	@echo "Running tests for '$(word 1,$(subst ., ,$(PHP_VERSION)))'..."
-	$Q $(GO) test -race $(if $(VERBOSE),-v) $(TAGS) $(if $(PACKAGE),$(PACKAGE),$(PACKAGES))
+	$Q $(GO) test $(if $(VERBOSE),-v) $(TAGS) $(if $(PACKAGE),$(PACKAGE),$(PACKAGES))
 	@echo "Running 'vet' for '$(NAME)'..."
 	$Q $(GO) vet $(if $(VERBOSE),-v) $(TAGS) $(if $(PACKAGE),$(PACKAGE),$(PACKAGES))
 
@@ -76,8 +76,9 @@ help:
 # Pull or build Docker image for PHP version specified.
 docker-image:
 	$Q docker image pull $(DOCKER_IMAGE) ||                \
-	   docker build --build-arg=PHP_VERSION=$(PHP_VERSION) --build-arg=STATIC=$(STATIC) \
-	                -t $(DOCKER_IMAGE) -f Dockerfile .     \
+	   docker build --build-arg=PHP_VERSION=$(PHP_VERSION) --build-arg=STATIC=$(STATIC)  \
+	   --build-arg=PHP_VERSION_INSTALL=php$(word 1,$(subst ., ,$(PHP_VERSION))).$(word 2,$(subst ., ,$(PHP_VERSION))) \
+	  -t $(DOCKER_IMAGE) -f Dockerfile .     \
 
 # Run Make target in Docker container. For instance, to run 'test', call as 'docker-test'.
 docker-%: docker-image

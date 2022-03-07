@@ -52,6 +52,7 @@ static void _receiver_free(zend_object *object) {
 // Initialize instance of method receiver object. The method receiver itself is
 // attached in the constructor function call.
 static zend_object *_receiver_init(zend_class_entry *class_type) {
+
 	engine_receiver *this = emalloc(sizeof(engine_receiver));
 	memset(this, 0, sizeof(engine_receiver));
 
@@ -75,6 +76,12 @@ static engine_receiver *_receiver_this(zend_object *object) {
 	return (engine_receiver *) object;
 }
 
+static void _receiver_handlers_set(zend_object_handlers * handlers) {
+    zend_object_handlers * std;
+	memcpy(std, &std_object_handlers, sizeof(std_object_handlers));
+	handlers->get_class_name  = std->get_class_name;
+	handlers->free_obj = _receiver_free;
+}
 // Return class name for method receiver.
 char *_receiver_get_name(engine_receiver *rcvr) {
 	return rcvr->obj.ce->name->val;

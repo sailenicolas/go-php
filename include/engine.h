@@ -10,7 +10,17 @@ typedef struct _php_engine {
 
 php_engine *engine_init(void);
 void engine_shutdown(php_engine *engine);
+static size_t _engine_ub_write(const char *str, size_t len);
 
-#include "_engine.h"
+#ifdef PHP_VERSION_ID
+#if PHP_VERSION_ID < 70400 && PHP_VERSION_ID > 70000
+
+
+#elif PHP_VERSION_ID >= 70400
+
+
+#endif
+
+#endif
 
 #endif

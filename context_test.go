@@ -61,6 +61,7 @@ func TestContextExec(t *testing.T) {
 			continue
 		}
 
+		fmt.Println(script.Name())
 		if err := c.Exec(script.Name()); err != nil {
 			t.Errorf("Context.Exec('%s'): Execution failed: %s", tt.name, err)
 			continue
@@ -103,6 +104,7 @@ func TestContextEval(t *testing.T) {
 	c.Output = &w
 
 	for _, tt := range evalTests {
+		fmt.Println(tt.script)
 		val, err := c.Eval(tt.script)
 		if err != nil {
 			t.Errorf("Context.Eval('%s'): %s", tt.script, err)

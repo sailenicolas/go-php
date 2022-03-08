@@ -62,16 +62,5 @@ static void _value_array_next_get(HashTable *ht, engine_value *val);
 static void _value_array_index_get(HashTable *ht, unsigned long index, engine_value *val);
 static void _value_array_key_get(HashTable *ht, char *key, engine_value *val);
 
-#ifdef PHP_VERSION_ID
-#if PHP_VERSION_ID < 70400 && PHP_VERSION_ID > 70000
-
-
-#elif PHP_VERSION_ID >= 70400
-
-
-#endif
-
-#endif
-
 #endif
 

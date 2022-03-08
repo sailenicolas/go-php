@@ -14,5 +14,11 @@ jobs:
         os:
           - ubuntu-18.04
     steps:
-      - uses: actions/checkout@v2
-      - run: make test
+     - name: CHECKOUT
+       uses: actions/checkout@v2
+        
+     - name: Setup PHP
+       uses: shivammathur/setup-php@v2
+       with:
+          php-version: '8.1'
+     - run: make test

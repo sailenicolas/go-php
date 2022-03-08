@@ -2,25 +2,25 @@
 // Use of this source code is governed by the MIT license that can be found in
 // the LICENSE file.
 
-static zval *_receiver_get(zval *object, zval *member, int type, void **cache_slot, zval *retval) {
+static zval *_receiver_get(zend_object *object, zend_string *member, int type, void **cache_slot, zval *rv) {
 	engine_value *result = receiver_get(object, member);
 	if (result == NULL) {
-		ZVAL_NULL(retval);
-		return retval;
+		ZVAL_NULL(rv);
+		return rv;
 	}
 
-	value_copy(retval, result->internal);
+	value_copy(rv, result->internal);
 	_value_destroy(result);
 
-	return retval;
+	return rv;
 }
 
-static void _receiver_set(zval *object, zval *member, zval *value, void **cache_slot) {
+static zval * _receiver_set(zend_object *object, zend_string *member, zval *value, void **cache_slot) {
 	receiver_set(object, member, value);
 }
 
-static int _receiver_exists(zval *object, zval *member, int check, void **cache_slot) {
-	return receiver_exists(object, member, check);
+static int _receiver_exists(zend_object *object, zend_string *member, int has_set_exists, void **cache_slot) {
+	return receiver_exists(object, member, has_set_exists);
 }
 
 static int _receiver_method_call(zend_string *method, zend_object *object, INTERNAL_FUNCTION_PARAMETERS) {
@@ -52,7 +52,8 @@ static void _receiver_free(zend_object *object) {
 // Initialize instance of method receiver object. The method receiver itself is
 // attached in the constructor function call.
 static zend_object *_receiver_init(zend_class_entry *class_type) {
-	engine_receiver *this = emalloc(sizeof(engine_receiver));
+
+	engine_receiver *this;
 	memset(this, 0, sizeof(engine_receiver));
 
 	zend_object_std_init(&(this->obj), class_type);
@@ -71,15 +72,8 @@ static void _receiver_destroy(char *name) {
 	}
 }
 
-static engine_receiver *_receiver_this(zval *object) {
-	return (engine_receiver *) Z_OBJ_P(object);
-}
-
-static void _receiver_handlers_set(zend_object_handlers *handlers) {
-	zend_object_handlers *std = zend_get_std_object_handlers();
-
-	handlers->get_class_name  = std->get_class_name;
-	handlers->free_obj = _receiver_free;
+static engine_receiver *_receiver_this(zend_object *object) {
+	return (engine_receiver *) object;
 }
 
 // Return class name for method receiver.

@@ -14,22 +14,22 @@
 #include "_cgo_export.h"
 
 // Fetch and return field for method receiver.
-static engine_value *receiver_get(zval *object, zval *member) {
+static engine_value *receiver_get(zend_object *object, zend_string *member) {
 	engine_receiver *this = _receiver_this(object);
-	return engineReceiverGet(this, Z_STRVAL_P(member));
+	return engineReceiverGet(this, ZSTR_VAL(member));
 }
 
 // Set field for method receiver.
-static void receiver_set(zval *object, zval *member, zval *value) {
+static zval * receiver_set(zend_object *object, zend_string *member, zval *value) {
 	engine_receiver *this = _receiver_this(object);
-	engineReceiverSet(this, Z_STRVAL_P(member), (void *) value);
+	engineReceiverSet(this, ZSTR_VAL(member), (void *) value);
 }
 
 // Check if field exists for method receiver.
-static int receiver_exists(zval *object, zval *member, int check) {
+static int receiver_exists(zend_object *object, zend_string *member, int check) {
 	engine_receiver *this = _receiver_this(object);
 
-	if (!engineReceiverExists(this, Z_STRVAL_P(member))) {
+	if (!engineReceiverExists(this, ZSTR_VAL(member))) {
 		// Value does not exist.
 		return 0;
 	} else if (check == 2) {
@@ -38,7 +38,7 @@ static int receiver_exists(zval *object, zval *member, int check) {
 	}
 
 	int result = 0;
-	engine_value *val = engineReceiverGet(this, Z_STRVAL_P(member));
+	engine_value *val = engineReceiverGet(this, ZSTR_VAL(member));
 
 	if (check == 1) {
 		// Value exists and is "truthy".
@@ -59,7 +59,7 @@ static int receiver_exists(zval *object, zval *member, int check) {
 // Call function with arguments passed and return value (if any).
 static int receiver_method_call(char *name, INTERNAL_FUNCTION_PARAMETERS) {
 	zval args;
-	engine_receiver *this = _receiver_this(getThis());
+	engine_receiver *this = _receiver_this(Z_OBJ_P(getThis()));
 
 	array_init_size(&args, ZEND_NUM_ARGS());
 
@@ -78,11 +78,12 @@ static int receiver_method_call(char *name, INTERNAL_FUNCTION_PARAMETERS) {
 	zval_dtor(&args);
 }
 
+
 // Create new method receiver instance and attach to instantiated PHP object.
 // Returns an exception if method receiver failed to initialize for any reason.
 static void receiver_new(INTERNAL_FUNCTION_PARAMETERS) {
 	zval args;
-	engine_receiver *this = _receiver_this(getThis());
+	engine_receiver *this = _receiver_this(Z_OBJ_P(ZEND_THIS));
 
 	array_init_size(&args, ZEND_NUM_ARGS());
 
@@ -104,7 +105,7 @@ static void receiver_new(INTERNAL_FUNCTION_PARAMETERS) {
 static zend_internal_function *receiver_method_get(zend_object *object) {
 	zend_internal_function *func = emalloc(sizeof(zend_internal_function));
 
-	func->type     = ZEND_OVERLOADED_FUNCTION;
+	func->type     = ZEND_INTERNAL_FUNCTION;
 	func->handler  = NULL;
 	func->arg_info = NULL;
 	func->num_args = 0;
@@ -131,44 +132,65 @@ static zend_internal_function *receiver_constructor_get(zend_object *object) {
 	return &func;
 }
 
-// Table of handler functions for method receivers.
-static zend_object_handlers receiver_handlers = {
-	ZEND_OBJECTS_STORE_HANDLERS,
+static zend_object_handlers receiver_handlers;
+void handlers_init(){
+	zend_object_handlers rh;
+    memcpy(&rh, &std_object_handlers, sizeof(std_object_handlers));
+	rh.get_method = _receiver_method_get;
+    rh.read_property = _receiver_get;
+    rh.write_property = _receiver_set;
+    rh.has_property = _receiver_exists;
+    rh.get_constructor = _receiver_constructor_get;
+	rh.free_obj = _receiver_free;
+	rh.get_class_name  = std_object_handlers.get_class_name;
+}
 
-	_receiver_get,           // read_property
-	_receiver_set,           // write_property
-	NULL,                    // read_dimension
-	NULL,                    // write_dimension
 
-	NULL,                    // get_property_ptr_ptr
-	NULL,                    // get
-	NULL,                    // set
+/* 	memcpy(&receiver_handlers, &std_object_handlers, sizeof(std_object_handlers));
+	receiver_handlers.offset  = 0;
+	receiver_handlers.get_method = _receiver_method_get;
+	receiver_handlers.read_property = _receiver_get;
+	receiver_handlers.write_property = _receiver_set;
+	receiver_handlers.has_property = _receiver_exists;
+	receiver_handlers.get_constructor = _receiver_constructor_get;
+*
+static zend_object_handlers receiver_handlers = 	{
+0, 								/* offset of real object header (usually zero)  /
+NULL,           				/* free_obj;             required 				/
+NULL,           				/* dtor_obj;             required 				/
+NULL,          					/* clone_obj;            optional 				/
+_receiver_get,      			/* read_property;        required 				/
+_receiver_set,     				/* write_property;       required 				/
+NULL,							/* read_dimension;       required 				/
+NULL,    						/* write_dimension;      required 				/
+NULL, 							/* get_property_ptr_ptr; required 				/
+_receiver_exists,   			/* has_property;         required 				/
+NULL,     						/* unset_property;       required 				/
+NULL,      						/* has_dimension;        required 				/
+NULL,    						/* unset_dimension;      required 				/
+NULL,    						/* get_properties;       required 				/
+_receiver_method_get,  			/* get_method;           required 				/
+_receiver_constructor_get,		/* get_constructor;      required 				/
+NULL,    						/* get_class_name;       required 				/
+NULL,    						/* cast_object;          required 				/
+NULL,    						/* count_elements;       optional 				/
+NULL,    						/* get_debug_info;       optional 				/
+NULL,    						/* get_closure;          optional 				/
+NULL,    						/* get_gc;               required 				/
+NULL,    						/* do_operation;         optional 				/
+NULL,    						/* compare;              required 				/
+NULL 							/* get_properties_for;   optional 				/
+};  */
 
-	_receiver_exists,        // has_property
-	NULL,                    // unset_property
-	NULL,                    // has_dimension
-	NULL,                    // unset_dimension
 
-	NULL,                    // get_properties
-
-	_receiver_method_get,     // get_method
-	_receiver_method_call,    // call_method
-
-	_receiver_constructor_get // get_constructor
-};
-
-// Define class with unique name.
 void receiver_define(char *name) {
 	zend_class_entry tmp;
-	INIT_CLASS_ENTRY_EX(tmp, name, strlen(name), NULL);
-
+	INIT_CLASS_ENTRY(tmp, name, NULL);
+	handlers_init();
 	zend_class_entry *this = zend_register_internal_class(&tmp);
-
-	this->create_object = _receiver_init;
+    // Set standard handlers for receiver.
+   	this->create_object = _receiver_init;
 	this->ce_flags |= ZEND_ACC_FINAL;
-
-	// Set standard handlers for receiver.
-	_receiver_handlers_set(&receiver_handlers);
 }
 
 void receiver_destroy(char *name) {

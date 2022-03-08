@@ -50,7 +50,28 @@ void value_array_reset(engine_value *arr);
 engine_value *value_array_next_get(engine_value *arr);
 engine_value *value_array_index_get(engine_value *arr, unsigned long idx);
 engine_value *value_array_key_get(engine_value *arr, char *key);
+zval *_value_init();
+void _value_destroy(engine_value *val);
 
-#include "_value.h"
+int _value_truth(zval *val);
+void _value_set_string(zval **val, char *str);
+static int _value_current_key_get(HashTable *ht, zend_string **str_index, zend_ulong *num_index);
+static void _value_current_key_set(HashTable *ht, engine_value *val);
+
+static void _value_array_next_get(HashTable *ht, engine_value *val);
+static void _value_array_index_get(HashTable *ht, unsigned long index, engine_value *val);
+static void _value_array_key_get(HashTable *ht, char *key, engine_value *val);
+
+#ifdef PHP_VERSION_ID
+#if PHP_VERSION_ID < 70400 && PHP_VERSION_ID > 70000
+
+
+#elif PHP_VERSION_ID >= 70400
+
 
 #endif
+
+#endif
+
+#endif
+

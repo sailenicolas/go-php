@@ -2,13 +2,6 @@
 // Use of this source code is governed by the MIT license that can be found in
 // the LICENSE file.
 
-zval *_value_init() {
-	zval *tmp = malloc(sizeof(zval));
-	ZVAL_NULL(tmp);
-
-	return tmp;
-}
-
 // Destroy and free engine value.
 void _value_destroy(engine_value *val) {
 	zval_dtor(val->internal);
@@ -55,10 +48,8 @@ static void _value_array_index_get(HashTable *ht, unsigned long index, engine_va
 static void _value_array_key_get(HashTable *ht, char *key, engine_value *val) {
 	zval *tmp = NULL;
 	zend_string *str = zend_string_init(key, strlen(key), 0);
-
 	if ((tmp = zend_hash_find(ht, str)) != NULL) {
 		value_set_zval(val, tmp);
 	}
-
 	zend_string_release(str);
 }

@@ -4,11 +4,7 @@
 
 package gophp
 
-// #cgo CFLAGS: -I/usr/include/php
-// #cgo CFLAGS: -I/usr/include/php/main
-// #cgo CFLAGS: -I/usr/include/php/TSRM
-// #cgo CFLAGS: -I/usr/include/php/Zend
-// #cgo CFLAGS: -Iincludes
+// #cgo CFLAGS: -Iinclude
 //
 // #include <stdlib.h>
 // #include <main/php.h>
@@ -38,7 +34,7 @@ func (r *Receiver) NewObject(args []interface{}) (*ReceiverObject, error) {
 	}
 
 	if obj.instance == nil {
-		return nil, fmt.Errorf("Failed to instantiate method receiver")
+		return nil, fmt.Errorf("failed to instantiate method receiver")
 	}
 
 	v := reflect.ValueOf(obj.instance)
@@ -93,7 +89,7 @@ type ReceiverObject struct {
 // error if the property does not exist or is not addressable.
 func (o *ReceiverObject) Get(name string) (*Value, error) {
 	if _, exists := o.values[name]; !exists || !o.values[name].CanInterface() {
-		return nil, fmt.Errorf("Value '%s' does not exist or is not addressable", name)
+		return nil, fmt.Errorf("value '%s' does not exist or is not addressable", name)
 	}
 
 	val, err := NewValue(o.values[name].Interface())

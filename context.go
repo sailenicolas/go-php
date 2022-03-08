@@ -4,11 +4,8 @@
 
 package gophp
 
-// #cgo CFLAGS: -I/usr/include/php
-// #cgo CFLAGS: -I/usr/include/php/main
-// #cgo CFLAGS: -I/usr/include/php/TSRM
-// #cgo CFLAGS: -I/usr/include/php/Zend
-// #cgo CFLAGS: -Iincludes/
+// #cgo CFLAGS: -Iinclude
+//
 // #include <stdlib.h>
 // #include <main/php.h>
 // #include "context.h"
@@ -79,7 +76,7 @@ func (c *Context) Eval(script string) (*Value, error) {
 
 	result, err := C.context_eval(c.context, s)
 	if err != nil {
-		return nil, fmt.Errorf("Error executing script '%s' in context", script)
+		return nil, fmt.Errorf("error executing script '%s' in context %s", script, err.Error())
 	}
 
 	defer C.free(result)

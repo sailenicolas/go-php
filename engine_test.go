@@ -39,7 +39,6 @@ var e *Engine
 
 func TestEngineNew(t *testing.T) {
 	var err error
-
 	if e, err = New(); err != nil {
 		t.Fatalf("New(): %s", err)
 	}
@@ -66,7 +65,7 @@ func TestEngineDefine(t *testing.T) {
 	}
 
 	if err := e.Define("TestDefine", ctor); err != nil {
-		t.Errorf("Engine.Define(): %s", err)
+		t.Errorf("Engine.Define(): %s", err.Error())
 	}
 
 	if len(e.receivers) != 1 {

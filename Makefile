@@ -11,7 +11,7 @@ DOCKER_IMAGE   := sailenicolas/$(NAME):$(PHP_VERSION)
 
 # Go build options.
 GO   := go
-TAGS := -tags 'php$(word 1,$(subst ., ,$(PHP_VERSION))) $(if $(findstring true,$(STATIC)),static)'
+TAGS := -tags 'php$(word 1,$(subst ., ,$(PHP_VERSION))) $(if $(findstring true,$(STATIC)),static) debian'
 
 # Install options.
 PREFIX := /usr
@@ -30,7 +30,9 @@ build: .build/env/GOPATH/.ok
 ## Run test for all local packages or specified PACKAGE.
 test: .build/env/GOPATH/.ok
 	@echo "Running tests for '$(NAME)'..."
-	$Q $(GO) test -race $(if $(VERBOSE),-v) $(TAGS) $(if $(PACKAGE),$(PACKAGE),$(PACKAGES))
+	@echo "Running tests for '$(TAGS)'..."
+	@echo "Running tests for '$(word 1,$(subst ., ,$(PHP_VERSION)))'..."
+	$Q $(GO) test $(if $(VERBOSE),-v) $(TAGS) $(if $(PACKAGE),$(PACKAGE),$(PACKAGES))
 	@echo "Running 'vet' for '$(NAME)'..."
 	$Q $(GO) vet $(if $(VERBOSE),-v) $(TAGS) $(if $(PACKAGE),$(PACKAGE),$(PACKAGES))
 
@@ -74,8 +76,9 @@ help:
 # Pull or build Docker image for PHP version specified.
 docker-image:
 	$Q docker image pull $(DOCKER_IMAGE) ||                \
-	   docker build --build-arg=PHP_VERSION=$(PHP_VERSION) --build-arg=STATIC=$(STATIC) \
-	                -t $(DOCKER_IMAGE) -f Dockerfile .     \
+	   docker build --build-arg=PHP_VERSION=$(PHP_VERSION) --build-arg=STATIC=$(STATIC)  \
+	   --build-arg=PHP_VERSION_INSTALL=php$(word 1,$(subst ., ,$(PHP_VERSION))).$(word 2,$(subst ., ,$(PHP_VERSION))) \
+	  -t $(DOCKER_IMAGE) -f Dockerfile .     \
 
 # Run Make target in Docker container. For instance, to run 'test', call as 'docker-test'.
 docker-%: docker-image

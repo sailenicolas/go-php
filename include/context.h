@@ -4,7 +4,6 @@
 
 #ifndef __CONTEXT_H__
 #define __CONTEXT_H__
-
 typedef struct _engine_context {
 } engine_context;
 
@@ -13,7 +12,18 @@ void context_exec(engine_context *context, char *filename);
 void *context_eval(engine_context *context, char *script);
 void context_bind(engine_context *context, char *name, void *value);
 void context_destroy(engine_context *context);
+static void _context_bind(char *name, zval *value);
+static void _context_eval(zend_op_array *op, zval *ret);
 
-#include "_context.h"
+#ifdef PHP_VERSION_ID
+#if PHP_VERSION_ID < 70400 && PHP_VERSION_ID > 70000
+
+
+#elif PHP_VERSION_ID >= 70400
+
+
+#endif
+
+#endif
 
 #endif

@@ -4,11 +4,7 @@
 
 package gophp
 
-// #cgo CFLAGS: -I/usr/include/php
-// #cgo CFLAGS: -I/usr/include/php/main
-// #cgo CFLAGS: -I/usr/include/php/TSRM
-// #cgo CFLAGS: -I/usr/include/php/Zend
-// #cgo CFLAGS: -Iincludes
+// #cgo CFLAGS: -Iinclude
 //
 // #include <stdlib.h>
 // #include <stdbool.h>
@@ -61,7 +57,7 @@ type Value struct {
 func NewValue(val interface{}) (*Value, error) {
 	ptr, err := C.value_new()
 	if err != nil {
-		return nil, fmt.Errorf("Unable to instantiate PHP value")
+		return nil, fmt.Errorf("unable to instantiate PHP value")
 	}
 
 	v := reflect.ValueOf(val)
@@ -120,7 +116,7 @@ func NewValue(val interface{}) (*Value, error) {
 				}
 			}
 		} else {
-			return nil, fmt.Errorf("Unable to create value of unknown type '%T'", val)
+			return nil, fmt.Errorf("unable to create value of unknown type '%T'", val)
 		}
 	// Bind struct to PHP object (stdClass) type.
 	case reflect.Struct:
@@ -148,7 +144,7 @@ func NewValue(val interface{}) (*Value, error) {
 		C.value_set_null(ptr)
 	default:
 		C._value_destroy(ptr)
-		return nil, fmt.Errorf("Unable to create value of unknown type '%T'", val)
+		return nil, fmt.Errorf("unable to create value of unknown type '%T'", val)
 	}
 
 	return &Value{value: ptr}, nil
@@ -157,16 +153,16 @@ func NewValue(val interface{}) (*Value, error) {
 // NewValueFromPtr creates a Value type from an existing PHP value pointer.
 func NewValueFromPtr(val unsafe.Pointer) (*Value, error) {
 	if val == nil {
-		return nil, fmt.Errorf("Cannot create value from 'nil' pointer")
+		return nil, fmt.Errorf("cannot create value from 'nil' pointer")
 	}
 
 	ptr, err := C.value_new()
 	if err != nil {
-		return nil, fmt.Errorf("Unable to create new PHP value")
+		return nil, fmt.Errorf("unable to create new PHP value" + err.Error())
 	}
 
 	if _, err := C.value_set_zval(ptr, (*C.zval)(val)); err != nil {
-		return nil, fmt.Errorf("Unable to set PHP value from pointer")
+		return nil, fmt.Errorf("unable to set PHP value from pointer " + err.Error())
 	}
 
 	return &Value{value: ptr}, nil

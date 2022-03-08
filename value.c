@@ -16,7 +16,8 @@ engine_value *value_new() {
 		return NULL;
 	}
 
-	val->internal = _value_init();
+	val->internal = malloc(sizeof(zval));
+	ZVAL_NULL(val->internal);
 	val->kind = KIND_NULL;
 
 	errno = 0;
@@ -82,7 +83,7 @@ void value_set_object(engine_value *val) {
 // affected.
 void value_set_zval(engine_value *val, zval *src) {
 	int kind;
-
+    printf("Strings - padding: %d\n\0", Z_TYPE_P(src));
 	// Determine concrete type from source zval.
 	switch (Z_TYPE_P(src)) {
 	case IS_NULL:
@@ -142,7 +143,6 @@ void value_set_zval(engine_value *val, zval *src) {
 
 	value_copy(val->internal, src);
 	val->kind = kind;
-
 	errno = 0;
 }
 
@@ -210,21 +210,19 @@ bool value_get_bool(engine_value *val) {
 char *value_get_string(engine_value *val) {
 	zval tmp;
 	int result;
-
 	switch (val->kind) {
 	case KIND_STRING:
 		value_copy(&tmp, val->internal);
 		break;
 	case KIND_OBJECT:
-		result = zend_std_cast_object_tostring(val->internal, &tmp, IS_STRING);
+		result = zend_std_cast_object_tostring(Z_OBJ_P(val->internal), &tmp, IS_STRING);
 		if (result == FAILURE) {
 			ZVAL_EMPTY_STRING(&tmp);
 		}
-
 		break;
 	default:
 		value_copy(&tmp, val->internal);
-		convert_to_cstring(&tmp);
+		convert_to_string(&tmp);
 	}
 
 	int len = Z_STRLEN(tmp) + 1;

@@ -7,13 +7,13 @@
 // conventions for include and library paths, so we need a specific build tag
 // for building against those packages.
 //
-//go:build debian && !php5
-// +build debian,!php5
+//go:build debian && !php7
+// +build debian,!php7
 
 package gophp
 
-// #cgo CFLAGS: -I/usr/include/php/20151012 -Iinclude/php7 -Isrc/php7
-// #cgo CFLAGS: -I/usr/include/php/20151012/main -I/usr/include/php/20151012/Zend
-// #cgo CFLAGS: -I/usr/include/php/20151012/TSRM
-// #cgo LDFLAGS: -lphp7.0
+// #cgo CFLAGS: -I/usr/include/php/20210902 -Isrc/
+// #cgo CFLAGS: -I/usr/include/php/20210902/main -I/usr/include/php/20210902/Zend
+// #cgo CFLAGS: -I/usr/include/php/20210902/TSRM
+// #cgo LDFLAGS: -lphp8
 import "C"

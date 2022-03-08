@@ -6,11 +6,8 @@
 // of PHP engine bindings, off which execution contexts can be launched.
 package gophp
 
-// #cgo CFLAGS: -I/usr/include/php
-// #cgo CFLAGS: -I/usr/include/php/main
-// #cgo CFLAGS: -I/usr/include/php/TSRM
-// #cgo CFLAGS: -I/usr/include/php/Zend
-// #cgo CFLAGS: -Iincludes/
+// #cgo CFLAGS: -Iinclude
+//
 // #include <stdlib.h>
 // #include <main/php.h>
 // #include "receiver.h"
@@ -42,7 +39,6 @@ func New() (*Engine, error) {
 	if engine != nil {
 		return nil, fmt.Errorf("Cannot activate multiple engine instances")
 	}
-
 	ptr, err := C.engine_init()
 	if err != nil {
 		return nil, fmt.Errorf("PHP engine failed to initialize")
@@ -63,7 +59,7 @@ func New() (*Engine, error) {
 func (e *Engine) NewContext() (*Context, error) {
 	ptr, err := C.context_new()
 	if err != nil {
-		return nil, fmt.Errorf("Failed to initialize context for PHP engine")
+		return nil, fmt.Errorf("Failed to initialize context for PHP engine" + err.Error())
 	}
 
 	ctx := &Context{

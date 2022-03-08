@@ -4,7 +4,7 @@
 
 #include <errno.h>
 #include <stdbool.h>
-
+#include <string.h> // correct header
 #include <main/php.h>
 #include <main/php_main.h>
 
@@ -42,11 +42,7 @@ void context_exec(engine_context *context, char *filename) {
 	// Attempt to execute script file.
 	zend_first_try {
 		zend_file_handle script;
-
-		script.type = ZEND_HANDLE_FILENAME;
-		script.filename = filename;
-		script.opened_path = NULL;
-
+		zend_stream_init_filename(&script, filename);
 		ret = php_execute_script(&script);
 	} zend_catch {
 		errno = 1;
@@ -63,8 +59,7 @@ void context_exec(engine_context *context, char *filename) {
 }
 
 void *context_eval(engine_context *context, char *script) {
-	zval *str = _value_init();
-	_value_set_string(&str, script);
+	zend_string *str = zend_string_init(script, strlen(script), 0);
 
 	// Compile script value.
 	uint32_t compiler_options = CG(compiler_options);
@@ -73,29 +68,39 @@ void *context_eval(engine_context *context, char *script) {
 	zend_op_array *op = zend_compile_string(str, "gophp-engine");
 	CG(compiler_options) = compiler_options;
 
-	zval_dtor(str);
-
+	zend_string_release(str);
 	// Return error if script failed to compile.
 	if (!op) {
 		errno = 1;
 		return NULL;
 	}
-
-	// Attempt to execute compiled string.
+	// Attempt to execute compiled string.	_context_eval(op, &tmp); _context_eval(zend_op_array *op, zval *ret)
 	zval tmp;
-	_context_eval(op, &tmp);
+	EG(no_extensions) = 1;
+	zend_try {
+		ZVAL_NULL(&tmp);
+		zend_execute(op, &tmp);
+	} zend_catch {
+		destroy_op_array(op);
+		efree_size(op, sizeof(zend_op_array));
+		zend_bailout();
+	} zend_end_try();
+
+	destroy_op_array(op);
+	efree_size(op, sizeof(zend_op_array));
+
+	EG(no_extensions) = 0;
 
 	// Allocate result value and copy temporary execution result in.
 	zval *result = malloc(sizeof(zval));
-	value_copy(result, &tmp);
-
+	ZVAL_COPY(result, &tmp);
 	errno = 0;
 	return result;
 }
 
 void context_bind(engine_context *context, char *name, void *value) {
 	engine_value *v = (engine_value *) value;
-	_context_bind(name, v->internal);
+	zend_hash_str_update(&EG(symbol_table), name, strlen(name), v->internal);
 }
 
 void context_destroy(engine_context *context) {
@@ -104,5 +109,3 @@ void context_destroy(engine_context *context) {
 	SG(server_context) = NULL;
 	free(context);
 }
-
-#include "_context.c"

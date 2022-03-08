@@ -76,7 +76,7 @@ func (c *Context) Eval(script string) (*Value, error) {
 
 	result, err := C.context_eval(c.context, s)
 	if err != nil {
-		return nil, fmt.Errorf("Error executing script '%s' in context", script)
+		return nil, fmt.Errorf("error executing script '%s' in context %s", script, err.Error())
 	}
 
 	defer C.free(result)

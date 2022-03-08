@@ -83,7 +83,7 @@ void value_set_object(engine_value *val) {
 // affected.
 void value_set_zval(engine_value *val, zval *src) {
 	int kind;
-
+    printf("Strings - padding: %d\n\0", Z_TYPE_P(src));
 	// Determine concrete type from source zval.
 	switch (Z_TYPE_P(src)) {
 	case IS_NULL:
@@ -143,7 +143,6 @@ void value_set_zval(engine_value *val, zval *src) {
 
 	value_copy(val->internal, src);
 	val->kind = kind;
-
 	errno = 0;
 }
 

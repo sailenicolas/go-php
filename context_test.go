@@ -195,7 +195,7 @@ func TestContextLog(t *testing.T) {
 
 	for _, tt := range logTests {
 		if _, err := c.Eval(tt.script); err != nil {
-			t.Errorf("Context.Eval('%s'): %s", tt.script, err)
+			t.Errorf("Context.Eval('%s'): %s", tt.script, err.Error())
 			continue
 		}
 

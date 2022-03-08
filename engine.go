@@ -39,7 +39,6 @@ func New() (*Engine, error) {
 	if engine != nil {
 		return nil, fmt.Errorf("Cannot activate multiple engine instances")
 	}
-
 	ptr, err := C.engine_init()
 	if err != nil {
 		return nil, fmt.Errorf("PHP engine failed to initialize")
@@ -60,7 +59,7 @@ func New() (*Engine, error) {
 func (e *Engine) NewContext() (*Context, error) {
 	ptr, err := C.context_new()
 	if err != nil {
-		return nil, fmt.Errorf("Failed to initialize context for PHP engine")
+		return nil, fmt.Errorf("Failed to initialize context for PHP engine" + err.Error())
 	}
 
 	ctx := &Context{

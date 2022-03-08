@@ -59,8 +59,7 @@ void context_exec(engine_context *context, char *filename) {
 }
 
 void *context_eval(engine_context *context, char *script) {
-	zend_string *str;
-	str = zend_string_init(script, strlen(script), 0);
+	zend_string *str = zend_string_init(script, strlen(script), 0);
 
 	// Compile script value.
 	uint32_t compiler_options = CG(compiler_options);
@@ -75,22 +74,33 @@ void *context_eval(engine_context *context, char *script) {
 		errno = 1;
 		return NULL;
 	}
-
-	// Attempt to execute compiled string.
+	// Attempt to execute compiled string.	_context_eval(op, &tmp); _context_eval(zend_op_array *op, zval *ret)
 	zval tmp;
-	_context_eval(op, &tmp);
+	EG(no_extensions) = 1;
+	zend_try {
+		ZVAL_NULL(&tmp);
+		zend_execute(op, &tmp);
+	} zend_catch {
+		destroy_op_array(op);
+		efree_size(op, sizeof(zend_op_array));
+		zend_bailout();
+	} zend_end_try();
+
+	destroy_op_array(op);
+	efree_size(op, sizeof(zend_op_array));
+
+	EG(no_extensions) = 0;
 
 	// Allocate result value and copy temporary execution result in.
 	zval *result = malloc(sizeof(zval));
-	value_copy(result, &tmp);
-
+	ZVAL_COPY(result, &tmp);
 	errno = 0;
 	return result;
 }
 
 void context_bind(engine_context *context, char *name, void *value) {
 	engine_value *v = (engine_value *) value;
-	_context_bind(name, v->internal);
+	zend_hash_str_update(&EG(symbol_table), name, strlen(name), v->internal);
 }
 
 void context_destroy(engine_context *context) {
@@ -99,5 +109,3 @@ void context_destroy(engine_context *context) {
 	SG(server_context) = NULL;
 	free(context);
 }
-
-#include "_context.c"

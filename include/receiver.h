@@ -48,6 +48,7 @@ static engine_receiver *_receiver_this(zend_object *object);
 static void _receiver_handlers_set(zend_object_handlers *handlers);
 char *_receiver_get_name(engine_receiver *rcvr);
 
+static void handlers_init();
 
 #endif
 

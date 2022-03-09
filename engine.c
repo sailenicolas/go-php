@@ -9,6 +9,7 @@
 #include <main/SAPI.h>
 #include <main/php_main.h>
 #include <main/php_variables.h>
+#include <zend_exceptions.h>
 
 #include "receiver.h"
 
@@ -50,7 +51,6 @@ static int engine_header_handler(sapi_header_struct *sapi_header, sapi_header_op
 		engineSetHeader(context, op, (void *) sapi_header->header, sapi_header->header_len);
 		break;
 	}
-
 	return 0;
 }
 

@@ -4,6 +4,7 @@
 #include <errno.h>
 #include <stdbool.h>
 #include <main/php.h>
+#include <zend_exceptions.h>
 
 #include "value.h"
 

@@ -1,4 +1,6 @@
-# PHP bindings for Go
+# PHP bindings for Go (PHP 8)
+
+## This fork does not work, is an attempt to make it compatible with PHP 8.
 
 [![API Documentation][godoc-svg]][godoc-url] [![MIT License][license-svg]][license-url]
 
@@ -15,7 +17,7 @@ For most Linux systems, this can usually be found be installed with `install-php
 Once the PHP library is available, the bindings can be compiled with `go build` and are `go get`-able.
 
 **Note**: Building against PHP 8.1.3 requires that the `php8` tag is provided, i.e.:
-
+**Note**: Pull Request are welcome.
 ```bash
 go get -tags php8 github.com/sailenicolas/go-php
 ```
@@ -48,6 +50,12 @@ Currently, the package lacks in several respects:
 These items will be tackled in order of significance (which may not be the order shown above).
 
 ## Usage
+
+### Tests
+To run tests is simple enough, just `make test`
+
+### Build a docker image
+To run tests is simple enough, just `make docker-image`
 
 ### Basic
 
@@ -109,13 +117,13 @@ Finally, the value is returned as an `interface{}` using `Value.Interface()` (on
 
 All code in this repository is covered by the terms of the MIT License, the full text of which can be found in the LICENSE file.
 
-[godoc-url]: https://godoc.org/github.com/deuill/go-php
-[godoc-svg]: https://godoc.org/github.com/deuill/go-php?status.svg
+[godoc-url]: https://pkg.go.dev/github.com/deuill/go-php
+[godoc-svg]: https://pkg.go.dev/github.com/deuill/go-php?status.svg
 
 [license-url]: https://github.com/deuill/go-php/blob/master/LICENSE
 [license-svg]: https://img.shields.io/badge/license-MIT-blue.svg
 
-[Context.Exec]: https://godoc.org/github.com/deuill/go-php/engine#Context.Exec
-[Context.Eval]: https://godoc.org/github.com/deuill/go-php/engine#Context.Eval
-[NewValue]:     https://godoc.org/github.com/deuill/go-php/engine#NewValue
-[NewReceiver]:  https://godoc.org/github.com/deuill/go-php/engine#NewReceiver
+[Context.Exec]: https://pkg.go.dev/github.com/deuill/go-php#Context.Exec
+[Context.Eval]: https://pkg.go.dev/github.com/deuill/go-php#Context.Eval
+[NewValue]:     https://pkg.go.dev/github.com/deuill/go-php#NewValue
+[NewReceiver]:  https://pkg.go.dev/github.com/deuill/go-php#NewReceiver

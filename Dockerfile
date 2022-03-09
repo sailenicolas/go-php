@@ -12,7 +12,7 @@ ARG PHP_VERSION_INSTALL
 ENV PHP_LDFLAGS="-Wl,-O1 -Wl,--hash-style=both -pie"
 ENV PHP_CFLAGS="-fstack-protector-strong -fpic -fpie -O2"
 ENV PHP_CPPFLAGS="${PHP_CFLAGS}"
-
+ENV PHP_VI="${PHP_VERSION_INSTALL}"
 # Fetch PHP source code. This step does not currently validate keys or checksums, as this process
 # will eventually transition to using the base `php` Docker images.
 ENV FETCH_DEPS="software-properties-common apt-transport-https lsb-release ca-certificates curl"
@@ -21,7 +21,7 @@ RUN set -xe && \
     apt-get install -y --no-install-recommends ${FETCH_DEPS} && \
     apt-get update
 
-ENV BUILD_DEPS="dpkg-dev ${PHP_VERSION_INSTALL}-dev ${PHP_VERSION_INSTALL}-common ${PHP_VERSION_INSTALL}-embed ${PHP_VERSION_INSTALL}-cli ${PHP_VERSION_INSTALL}-opcache lib${PHP_VERSION_INSTALL}-embed ${PHP_VERSION_INSTALL}-readline ${PHP_VERSION_INSTALL}-opcache ${PHP_VERSION_INSTALL}-xml ${PHP_VERSION_INSTALL} php-common lib${PHP_VERSION_INSTALL}-embed-dbgsym"
+ENV BUILD_DEPS="dpkg-dev ${PHP_VI}-dev ${PHP_VI}-common ${PHP_VI}-embed ${PHP_VI}-cli ${PHP_VI}-opcache lib${PHP_VI}-embed ${PHP_VI}-readline ${PHP_VI}-opcache ${PHP_VI}-xml ${PHP_VI} php-common lib${PHP_VI}-embed-dbgsym"
 
 RUN curl -vksSLo /usr/share/keyrings/deb.sury.org-php.gpg https://packages.sury.org/php/apt.gpg &&\
     echo "deb [signed-by=/usr/share/keyrings/deb.sury.org-php.gpg] https://packages.sury.org/php/ $(lsb_release -sc) main" > /etc/apt/sources.list.d/php.list && \
@@ -30,12 +30,10 @@ RUN curl -vksSLo /usr/share/keyrings/deb.sury.org-php.gpg https://packages.sury.
     apt-get dist-upgrade -y && \
     export CFLAGS="${PHP_CFLAGS}" CPPFLAGS="${PHP_CPPFLAGS}" LDFLAGS="${PHP_LDFLAGS}"; \
     apt-get install -y --no-install-recommends ${BUILD_DEPS};
-WORKDIR /root
 COPY ./docker-entrypoint.sh .
 RUN export PHPVERSIONID=$(ls /usr/include/php) && \
     export arch="$(dpkg-architecture --query DEB_BUILD_GNU_TYPE)" &&\
     export multiarch="$(dpkg-architecture --query DEB_BUILD_MULTIARCH)" && \
     echo 'export PHPVERSIONID=$(ls /usr/include/php)' >> /etc/profile && \
     chmod +x ./docker-entrypoint.sh;
-
 ENTRYPOINT ["./docker-entrypoint.sh"]

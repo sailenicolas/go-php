@@ -4,21 +4,23 @@
 
 This package implements support for executing PHP scripts, exporting Go variables for use in PHP contexts, attaching Go method receivers as PHP classes and returning PHP variables for use in Go contexts.
 
-Both PHP 5.x and PHP 7.x series are supported.
+Only PHP > 8.1 series are supported.
 
 ## Building
 
-Building this package requires that you have PHP installed as a library. For most Linux systems, this can usually be found in the `php-embed` package, or variations thereof.
+Building this package requires that you have PHP installed as a library. 
+
+For most Linux systems, this can usually be found be installed with `install-php.sh` or use the build and compile option in the `build-php.sh`.
 
 Once the PHP library is available, the bindings can be compiled with `go build` and are `go get`-able.
 
-**Note**: Building against PHP 5.x requires that the `php5` tag is provided, i.e.:
+**Note**: Building against PHP 8.1.3 requires that the `php8` tag is provided, i.e.:
 
 ```bash
-go get -tags php5 github.com/deuill/go-php
+go get -tags php8 github.com/sailenicolas/go-php
 ```
 
-This is due to the fact that PHP 7.x is the default build target.
+There is not a default build target.
 
 ## Status
 
@@ -30,7 +32,7 @@ It is possible to [attach Go method receivers][NewReceiver] as PHP classes, with
 
 ### Caveats
 
-Be aware that, by default, PHP is **not** designed to be used in multithreaded environments (which severely restricts the use of these bindings with Goroutines) if not built with [ZTS support](https://secure.php.net/manual/en/pthreads.requirements.php). However, ZTS support has seen major refactoring between PHP 5 and PHP 7, and as such is currently unsupported by this package.
+Be aware that, by default, PHP is **not** designed to be used in multithreaded environments (which severely restricts the use of these bindings with Goroutines) if not built with [ZTS support](https://secure.php.net/manual/en/pthreads.requirements.php). However, PHP 8 ZTS support has seen major refactoring, and as such is currently unsupported by this package.
 
 Currently, it is recommended to either sync use of seperate Contexts between Goroutines, or share a single Context among all running Goroutines.
 
@@ -55,7 +57,7 @@ Executing a script is simple:
 package main
 
 import (
-    php "github.com/deuill/go-php"
+    php "github.com/sailenicolas/gophp"
     "os"
 )
 
@@ -81,7 +83,7 @@ package main
 
 import (
     "fmt"
-    php "github.com/deuill/go-php"
+    php "github.com/sailenicolas/gophp"
 )
 
 func main() {

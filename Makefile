@@ -11,7 +11,7 @@ DOCKER_IMAGE	:= sailenicolas/$(NAME):$(PHP_VERSION)
 BUILD_IMAGE_LSB	:= $(shell lsb_release -si)
 # Go build options.
 GO   := go
-TAGS := -tags 'php$(word 1,$(subst ., ,$(PHP_VERSION))),$(if $(findstring true, $(STATIC)), static,)$(BUILD_IMAGE_LSB)'
+TAGS := -tags $(BUILD_IMAGE_LSB),$(if $(findstring true, $(STATIC)), static,)php$(word 1,$(subst ., ,$(PHP_VERSION)))
 
 # Install options.
 PREFIX := /usr

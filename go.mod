@@ -1,3 +1,3 @@
-module github.com/sailenicolas/gophp
+module gitlab.com/sailenicolas/gophp
 
 go 1.17

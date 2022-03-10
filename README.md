@@ -16,10 +16,10 @@ For most Linux systems, this can usually be found be installed using `install-ph
 
 Once the PHP library is available, the bindings can be compiled with `go build` and are `go get`-able.
 
-**Note**: Building against PHP 8.1.3 requires that the `php8` tag is provided, i.e.:
 **Note**: Pull Request are welcome.
+**Note**: Building against PHP 8.1.3 requires that the `php8` tag is provided, i.e.:
 ```bash
-go get -tags php8 github.com/sailenicolas/go-php
+go get -tags php8 gitlab.com/sailenicolas/gophp
 ```
 
 There is not a default build target.
@@ -117,13 +117,13 @@ Finally, the value is returned as an `interface{}` using `Value.Interface()` (on
 
 All code in this repository is covered by the terms of the MIT License, the full text of which can be found in the LICENSE file.
 
-[godoc-url]: https://pkg.go.dev/github.com/deuill/go-php
-[godoc-svg]: https://pkg.go.dev/badge/github.com/deuill/go-php
+[godoc-url]: https://pkg.go.dev/gitlab.com/sailenicolas/gophp
+[godoc-svg]: https://pkg.go.dev/badge/gitlab.com/sailenicolas/gophp
 
-[license-url]: https://github.com/deuill/go-php/blob/master/LICENSE
+[license-url]: https://gitlab.com/sailenicolas/gophp/blob/master/LICENSE
 [license-svg]: https://img.shields.io/badge/license-MIT-blue.svg
 
-[Context.Exec]: https://pkg.go.dev/github.com/deuill/go-php#Context.Exec
-[Context.Eval]: https://pkg.go.dev/github.com/deuill/go-php#Context.Eval
-[NewValue]:     https://pkg.go.dev/github.com/deuill/go-php#NewValue
-[NewReceiver]:  https://pkg.go.dev/github.com/deuill/go-php#NewReceiver
+[Context.Exec]: https://pkg.go.dev/github.com/gitlab/gophp#Context.Exec
+[Context.Eval]: https://pkg.go.dev/github.com/gitlab/gophp#Context.Eval
+[NewValue]:     https://pkg.go.dev/github.com/gitlab/gophp#NewValue
+[NewReceiver]:  https://pkg.go.dev/github.com/gitlab/gophp#NewReceiver

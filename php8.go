@@ -2,11 +2,13 @@
 // Use of this source code is governed by the MIT license that can be found in
 // the LICENSE file.
 //
-//go:build !debian && !php7
-// +build !debian,!php7
+//go:build !Debian && php8 && !static
+// +build !Debian,php8,!static
 
 package gophp
 
-// #cgo CFLAGS: -Iinclude/php8 -Isrc/php8
-// #cgo LDFLAGS: -lphp8.1
+// #cgo CFLAGS: -I/usr/include/php/20210902 -Isrc/  -Iinclude/
+// #cgo CFLAGS: -I/usr/include/php/20210902/main -I/usr/include/php/20210902/Zend
+// #cgo CFLAGS: -I/usr/include/php/20210902/TSRM
+// #cgo LDFLAGS: -lphp8
 import "C"

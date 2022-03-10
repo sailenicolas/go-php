@@ -4,8 +4,6 @@
 
 package gophp
 
-// #cgo CFLAGS: -Iinclude
-//
 // #include <stdlib.h>
 // #include <main/php.h>
 // #include "context.h"

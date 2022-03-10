@@ -37,3 +37,4 @@ RUN export PHPVERSIONID=$(ls /usr/include/php) && \
     echo 'export PHPVERSIONID=$(ls /usr/include/php)' >> /etc/profile && \
     chmod +x /root/docker-entrypoint.sh;
 ENTRYPOINT ["/root/docker-entrypoint.sh"]
+CMD /bin/sh -c

@@ -1,4 +1,3 @@
 #!/bin/sh
-. /etc/profile
-# and add this at the end
+sed -xe
 exec "$@"

@@ -12,7 +12,7 @@ Only PHP > 8.1 series are supported.
 
 Building this package requires that you have PHP installed as a library. 
 
-For most Linux systems, this can usually be found be installed with `install-php.sh` or use the build and compile option in the `build-php.sh`.
+For most Linux systems, this can usually be found be installed using `install-php.sh` (debian only) or use the build and compile option with `build-php.sh`.
 
 Once the PHP library is available, the bindings can be compiled with `go build` and are `go get`-able.
 

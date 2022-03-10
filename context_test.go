@@ -61,8 +61,8 @@ func TestContextExec(t *testing.T) {
 			continue
 		}
 
-		fmt.Println(script.Name())
 		if err := c.Exec(script.Name()); err != nil {
+			fmt.Println(script.Name())
 			t.Errorf("Context.Exec('%s'): Execution failed: %s", tt.name, err)
 			continue
 		}
@@ -104,9 +104,9 @@ func TestContextEval(t *testing.T) {
 	c.Output = &w
 
 	for _, tt := range evalTests {
-		fmt.Println(tt.script)
 		val, err := c.Eval(tt.script)
 		if err != nil {
+			fmt.Println(tt.script)
 			t.Errorf("Context.Eval('%s'): %s", tt.script, err)
 			continue
 		}
@@ -178,12 +178,16 @@ var logTests = []struct {
 		"PHP Warning:  Undefined variable $b in gophp-engine on line 1",
 	},
 	{
-		"strlen();",
-		"strlen() expects exactly 1 parameter, 0 given in gophp-engine on line 1",
+		"strlen(NULL);",
+		"PHP Deprecated:  strlen(): Passing null to parameter #1 ($string) of type string is deprecated in gophp-engine on line 1",
 	},
 	{
 		"trigger_error('Test Error');",
 		"Test Error in gophp-engine on line 1",
+	},
+	{
+		"trigger_error('ERRORIFY');",
+		"ERRORIFY in gophp-engine on line 1",
 	},
 }
 

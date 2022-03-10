@@ -21,16 +21,4 @@ static void engine_register_variables(zval *track_vars_array);
 
 static void engine_log_message(const char *str, int syslog_type_int);
 
-#ifdef PHP_VERSION_ID
-
-#if PHP_VERSION_ID > 70000
-
-
-#elif PHP_VERSION_ID >= 70400
-
-
-#endif
-
-#endif
-
 #endif

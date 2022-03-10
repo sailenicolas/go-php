@@ -82,6 +82,7 @@ func (e *Engine) NewContext() (*Context, error) {
 // The constructor function accepts a slice of arguments, as passed by the PHP
 // context, and should return a method receiver instance, or nil on error (in
 // which case, an exception is thrown on the PHP object constructor).
+
 func (e *Engine) Define(name string, fn func(args []interface{}) interface{}) error {
 	if _, exists := e.receivers[name]; exists {
 		return fmt.Errorf("Failed to define duplicate receiver '%s'", name)
@@ -92,10 +93,9 @@ func (e *Engine) Define(name string, fn func(args []interface{}) interface{}) er
 		create:  fn,
 		objects: make(map[*C.struct__engine_receiver]*ReceiverObject),
 	}
-
 	n := C.CString(name)
-	defer C.free(unsafe.Pointer(n))
 
+	defer C.free(unsafe.Pointer(n))
 	C.receiver_define(n)
 	e.receivers[name] = rcvr
 

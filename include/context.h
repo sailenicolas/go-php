@@ -15,15 +15,4 @@ void context_destroy(engine_context *context);
 static void _context_bind(char *name, zval *value);
 static void _context_eval(zend_op_array *op, zval *ret);
 
-#ifdef PHP_VERSION_ID
-#if PHP_VERSION_ID < 70400 && PHP_VERSION_ID > 70000
-
-
-#elif PHP_VERSION_ID >= 70400
-
-
-#endif
-
-#endif
-
 #endif

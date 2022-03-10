@@ -6,7 +6,6 @@
 // of PHP engine bindings, off which execution contexts can be launched.
 package gophp
 
-// #cgo CFLAGS: -Iinclude
 //
 // #include <stdlib.h>
 // #include <main/php.h>

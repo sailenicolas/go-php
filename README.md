@@ -118,7 +118,7 @@ Finally, the value is returned as an `interface{}` using `Value.Interface()` (on
 All code in this repository is covered by the terms of the MIT License, the full text of which can be found in the LICENSE file.
 
 [godoc-url]: https://pkg.go.dev/github.com/deuill/go-php
-[godoc-svg]: https://pkg.go.dev/github.com/deuill/go-php?status.svg
+[godoc-svg]: https://pkg.go.dev/badge/github.com/deuill/go-php
 
 [license-url]: https://github.com/deuill/go-php/blob/master/LICENSE
 [license-svg]: https://img.shields.io/badge/license-MIT-blue.svg

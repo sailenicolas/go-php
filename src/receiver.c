@@ -103,31 +103,31 @@ void handlers_init(){
 }
 
 static zend_object_handlers receiver_handlers = 	{
-0, 								/* offset of real object header (usually zero)  */
-NULL,/*zend_object_std_dtor,            free_obj;             required 				*/
-NULL,/*zend_objects_destroy_object,     dtor_obj;             required 				*/
-NULL, /*zend_objects_clone_obj,          clone_obj;            optional 				*/
-receiver_get,       			/* read_property;        required 				*/
-receiver_set,     				/* write_property;       required 				*/
-NULL,/* zend_std_read_dimension,		read_dimension;       required 				*/
-NULL,/* zend_std_write_dimension,    	write_dimension;      required 				*/
-NULL,/* zend_std_get_property_ptr_ptr, 	get_property_ptr_ptr; required 				*/
-receiver_exists,    			/* has_property;         required 				*/
-NULL,/*zend_std_unset_property,     	 unset_property;       required 				*/
-NULL,/*zend_std_has_dimension,      	 has_dimension;        required 				*/
-NULL,/*zend_std_unset_dimension,    	 unset_dimension;      required 				*/
-NULL,/*zend_std_get_properties,    	 get_properties;       required 				*/
-_receiver_method_get,  			/* get_method;           required 				*/
-_receiver_constructor_get,		/* get_constructor;      required 				*/
-NULL,/*zend_std_get_class_name,    	 get_class_name;       required 				*/
-NULL,    						/* cast_object;          required 				*/
-NULL,    						/* count_elements;       optional 				*/
-NULL,/*zend_std_get_debug_info,    	 get_debug_info;       optional 				*/
-NULL,/*zend_std_get_closure,    		 get_closure;          optional 				*/
-NULL,/*zend_std_get_gc,    			 get_gc;               required 				*/
-NULL,    						/* do_operation;         optional 				*/
-NULL,    						/* compare;              required 				*/
-NULL 							/* get_properties_for;   optional 				*/
+0, 							/* offset of real object header (usually zero)  */
+NULL,						/* zend_object_std_dtor,            free_obj;				required */
+NULL,						/* zend_objects_destroy_object,     dtor_obj;   			required */
+NULL, 						/* zend_objects_clone_obj,          clone_obj;  			optional */
+receiver_get,       		/* 									read_property; 			required */
+receiver_set,     			/* 									write_property; 		required */
+NULL,						/* zend_std_read_dimension,			read_dimension; 		required */
+NULL,						/* zend_std_write_dimension,  		write_dimension; 		required */
+NULL,						/* zend_std_get_property_ptr_ptr, 	get_property_ptr_ptr; 	required */
+receiver_exists,    		/* 							 		has_property; 			required */
+NULL,						/* zend_std_unset_property,   		unset_property;    		required */
+NULL,						/* zend_std_has_dimension,    		has_dimension;     		required */
+NULL,						/* zend_std_unset_dimension,  		unset_dimension;   		required */
+NULL,						/* zend_std_get_properties,   		get_properties;    		required */
+_receiver_method_get,  		/* get_method;           									required */
+_receiver_constructor_get,	/* get_constructor;      									required */
+NULL,						/* zend_std_get_class_name,  		get_class_name;     	required */
+NULL,    					/* cast_object;          									required */
+NULL,    					/* count_elements;       									optional */
+NULL,						/* zend_std_get_debug_info,  		get_debug_info;     	optional */
+NULL,						/* zend_std_get_closure,    		get_closure;        	optional */
+NULL,						/* zend_std_get_gc,    				get_gc;             	required */
+NULL,    					/* do_operation;        									optional */
+NULL,    					/* compare;             									required */
+NULL 						/* get_properties_for;  									optional */
 };
 
 static const zend_function_entry receiver_define_methods[] = {

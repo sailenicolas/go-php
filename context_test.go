@@ -178,12 +178,16 @@ var logTests = []struct {
 		"PHP Warning:  Undefined variable $b in gophp-engine on line 1",
 	},
 	{
-		"strlen();",
-		"strlen() expects exactly 1 parameter, 0 given in gophp-engine on line 1",
+		"strlen(NULL);",
+		"PHP Deprecated:  strlen(): Passing null to parameter #1 ($string) of type string is deprecated in gophp-engine on line 1",
 	},
 	{
 		"trigger_error('Test Error');",
 		"Test Error in gophp-engine on line 1",
+	},
+	{
+		"trigger_error('ERRORIFY');",
+		"ERRORIFY in gophp-engine on line 1",
 	},
 }
 

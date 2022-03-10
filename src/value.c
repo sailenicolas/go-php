@@ -11,15 +11,9 @@
 // Creates a new value and initializes type to null.
 engine_value *value_new() {
 	engine_value *val = malloc(sizeof(engine_value));
-	if (val == NULL) {
-		errno = 1;
-		return NULL;
-	}
-
 	val->internal = malloc(sizeof(zval));
-	ZVAL_NULL(val->internal);
+    ZVAL_NULL(val->internal);
 	val->kind = KIND_NULL;
-
 	errno = 0;
 	return val;
 }
@@ -27,7 +21,7 @@ engine_value *value_new() {
 // Creates a complete copy of a zval.
 // The destination zval needs to be correctly initialized before use.
 void value_copy(zval *dst, zval *src) {
-	ZVAL_COPY_VALUE(dst, src);
+	ZVAL_COPY(dst, src);
 	zval_copy_ctor(dst);
 }
 
@@ -83,7 +77,6 @@ void value_set_object(engine_value *val) {
 // affected.
 void value_set_zval(engine_value *val, zval *src) {
 	int kind;
-    printf("Strings - padding: %d\n\0", Z_TYPE_P(src));
 	// Determine concrete type from source zval.
 	switch (Z_TYPE_P(src)) {
 	case IS_NULL:
@@ -136,11 +129,12 @@ void value_set_zval(engine_value *val, zval *src) {
 			break;
 		}
 
-		errno = 1;
+		errno = -1;
 		return;
 	}
 
-	value_copy(val->internal, src);
+	ZVAL_COPY(val->internal, src);
+	zval_copy_ctor(src);
 	val->kind = kind;
 	errno = 0;
 }

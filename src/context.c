@@ -45,9 +45,6 @@ void context_exec(engine_context *context, char *filename) {
 	zend_first_try {
 		zend_file_handle script;
 		zend_stream_init_filename(&script, filename);
-		script.primary_script=1;
-
-
 		ret = php_execute_script(&script);
 		if (ret == FAILURE) {
         	printf("Failed to execute PHP script.\n\0");
@@ -86,8 +83,8 @@ void *context_eval(engine_context *context, char *script) {
 		return NULL;
 	}
 	// Attempt to execute compiled string.	_context_eval(op, &tmp); _context_eval(zend_op_array *op, zval *ret)
-	zval tmp;
 	EG(no_extensions) = 1;
+	zval tmp;
 	zend_try {
 		ZVAL_NULL(&tmp);
 		zend_execute(op, &tmp);
@@ -97,6 +94,7 @@ void *context_eval(engine_context *context, char *script) {
 		zend_bailout();
 	} zend_end_try();
 
+	zend_destroy_static_vars(op);
 	destroy_op_array(op);
 	efree_size(op, sizeof(zend_op_array));
 
@@ -104,7 +102,8 @@ void *context_eval(engine_context *context, char *script) {
 
 	// Allocate result value and copy temporary execution result in.
 	zval *result = malloc(sizeof(zval));
-	ZVAL_COPY(result, &tmp);
+	ZVAL_COPY_VALUE(result, &tmp);
+	zval_copy_ctor(&tmp);
 	errno = 0;
 	return result;
 }

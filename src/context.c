@@ -47,12 +47,12 @@ void context_exec(engine_context *context, char *filename) {
 		zend_stream_init_filename(&script, filename);
 		ret = php_execute_script(&script);
 		if (ret == FAILURE) {
-        	printf("Failed to execute PHP script.\n\0");
+        	printf("Failed to execute PHP script.\n");
         }
         zend_destroy_file_handle(&script);
 	} zend_catch {
 		errno = 1;
-	    printf("Something went wrong, PHP script.\n\0");
+	    printf("Something went wrong, PHP script.\n");
 		return;
 	} zend_end_try();
 

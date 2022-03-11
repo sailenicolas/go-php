@@ -12,14 +12,5 @@ testgophp8:
             - vendor/
     script:
         - make test
-testgophp7:
-    image: sailenicolas/gophp:7.4.28
-    only:
-        - php8
-    cache:
-        key: "$CI_COMMIT_REF_SLUG"
-        paths:
-            - vendor/
-    script:
-        - make test
+
 

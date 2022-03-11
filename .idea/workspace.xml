@@ -5,10 +5,19 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="06e2f904-2223-4a6c-abae-951b75adff02" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/php7-debian.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gitlab-ci.yml" beforeDir="false" afterPath="$PROJECT_DIR$/.gitlab-ci.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/runConfigurations/engine_test_go.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/runConfigurations/engine_test_go.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/runConfigurations/go_test_github_com_sailenicolas_gophp.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/runConfigurations/go_test_gitlab_com_sailenicolas_gophp.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/php-tools/Dockerfile" beforeDir="false" afterPath="$PROJECT_DIR$/php-tools/Dockerfile" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/php-tools/docker-entrypoint.sh" beforeDir="false" afterPath="$PROJECT_DIR$/php-tools/docker-entrypoint.sh" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/include/context.h" beforeDir="false" afterPath="$PROJECT_DIR$/include/context.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/include/engine.h" beforeDir="false" afterPath="$PROJECT_DIR$/include/engine.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/include/receiver.h" beforeDir="false" afterPath="$PROJECT_DIR$/include/receiver.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/include/value.h" beforeDir="false" afterPath="$PROJECT_DIR$/include/value.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/php8-debian.go" beforeDir="false" afterPath="$PROJECT_DIR$/php8-debian.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/context.c" beforeDir="false" afterPath="$PROJECT_DIR$/src/context.c" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/engine.c" beforeDir="false" afterPath="$PROJECT_DIR$/src/engine.c" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/receiver.c" beforeDir="false" afterPath="$PROJECT_DIR$/src/receiver.c" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/value.c" beforeDir="false" afterPath="$PROJECT_DIR$/src/value.c" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -61,7 +70,7 @@
       <recent name="\\wsl$\Debian\home\saile\go\src\gitlab.com\sailenicolas\gophp" />
     </key>
   </component>
-  <component name="RunManager" selected="Go Test.receiver_test.go">
+  <component name="RunManager" selected="Go Test.engine_test.go">
     <configuration default="true" type="GoApplicationRunConfiguration" factoryName="Go Application">
       <module name="gophp" />
       <working_directory value="$PROJECT_DIR$" />
@@ -83,20 +92,8 @@
       <framework value="gotest" />
       <method v="2" />
     </configuration>
-    <configuration name="context_test.go" type="GoTestRunConfiguration" factoryName="Go Test" nameIsGenerated="true">
-      <module name="gophp" />
-      <working_directory value="$PROJECT_DIR$" />
-      <go_parameters value="-tags php8,debian" />
-      <useCustomBuildTags value="true" />
-      <kind value="FILE" />
-      <package value="github.com/sailenicolas/gophp81" />
-      <directory value="$PROJECT_DIR$" />
-      <filePath value="$PROJECT_DIR$/context_test.go" />
-      <framework value="gotest" />
-      <method v="2" />
-    </configuration>
     <list>
-      <item itemvalue="Go Test.go test github.com/sailenicolas/gophp" />
+      <item itemvalue="Go Test.go test gitlab.com/sailenicolas/gophp" />
       <item itemvalue="Go Test.engine_test.go" />
       <item itemvalue="Go Test.receiver_test.go" />
       <item itemvalue="Go Test.value_test.go" />
@@ -120,6 +117,13 @@
   </component>
   <component name="VgoProject">
     <integration-enabled>true</integration-enabled>
+  </component>
+  <component name="XDebuggerManager">
+    <watches-manager>
+      <configuration name="GoTestRunConfiguration">
+        <watch expression="tmp" />
+      </configuration>
+    </watches-manager>
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/gophp81$TestEngineDefine_in_github_com_sailenicolas_gophp.out" NAME="TestEngineDefine in github.com/sailenicolas/gophp Coverage Results" MODIFIED="1646898469811" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="GoCoverage" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" />

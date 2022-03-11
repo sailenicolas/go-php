@@ -11,7 +11,7 @@ typedef struct _engine_receiver {
 
 void receiver_define(char *name);
 void receiver_destroy(char *name);
-
+/*
 static zval * receiver_get(zend_object *object, zend_string *member, int type, void **cache_slot, zval *rv);
 static zval * receiver_set(zend_object *object, zend_string *member, zval *value, void **cache_slot);
 static int receiver_exists(zend_object *object, zend_string *member, int has_set_exists, void **cache_slot);
@@ -26,9 +26,10 @@ static void _receiver_destroy(char *name);
 
 static engine_receiver * receiver_this(zend_object *object);
 static void receiver_handlers_set(zend_object_handlers *handlers);
-char *_receiver_get_name(engine_receiver *rcvr);
 
 static void handlers_init();
+*/
 
+char *_receiver_get_name(engine_receiver *rcvr);
 #endif
 

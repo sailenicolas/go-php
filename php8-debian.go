@@ -15,5 +15,6 @@ package gophp
 // #cgo CFLAGS: -I/usr/include/php/20210902 -Isrc/ -Iinclude/
 // #cgo CFLAGS: -I/usr/include/php/20210902/main -I/usr/include/php/20210902/Zend
 // #cgo CFLAGS: -I/usr/include/php/20210902/TSRM
+// #cgo CFLAGS: -g -Wall -Wextra
 // #cgo LDFLAGS: -lphp8
 import "C"

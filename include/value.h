@@ -86,9 +86,9 @@ void value_destroy(engine_value *val);
 
 int value_truth(zval *val);
 
-static int value_current_key_get(HashTable *ht, zend_string **str_index, zend_ulong *num_index);
+//static int value_current_key_get(HashTable *ht, zend_string **str_index, zend_ulong *num_index);
 
-static void value_current_key_set(HashTable *ht, engine_value *val);
+//static void value_current_key_set(HashTable *ht, engine_value *val);
 
 #endif
 

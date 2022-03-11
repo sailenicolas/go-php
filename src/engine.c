@@ -48,6 +48,8 @@ static int engine_header_handler(sapi_header_struct *sapi_header, sapi_header_op
 	case SAPI_HEADER_REPLACE:
 	case SAPI_HEADER_ADD:
 	case SAPI_HEADER_DELETE:
+	case SAPI_HEADER_DELETE_ALL:
+	case SAPI_HEADER_SET_STATUS:
 		engineSetHeader(context, op, (void *) sapi_header->header, sapi_header->header_len);
 		break;
 	}

@@ -9,6 +9,8 @@
     <directory value="$PROJECT_DIR$" />
     <filePath value="$PROJECT_DIR$/engine_test.go" />
     <framework value="gotest" />
-    <method v="2" />
+    <method v="2">
+      <option name="GoBeforeRunTask" command="clean -cache -testcache" />
+    </method>
   </configuration>
 </component>

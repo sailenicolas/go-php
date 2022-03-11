@@ -13,12 +13,12 @@ php_engine *engine_init(void);
 
 void engine_shutdown(php_engine *engine);
 
-static size_t engine_ub_write(const char *str, size_t len);
+//static size_t engine_ub_write(const char *str, size_t len);
 
-static char *engine_read_cookies();
+//static char *engine_read_cookies();
 
-static void engine_register_variables(zval *track_vars_array);
+//static void engine_register_variables(zval *track_vars_array);
 
-static void engine_log_message(const char *str, int syslog_type_int);
+//static void engine_log_message(const char *str, int syslog_type_int);
 
 #endif

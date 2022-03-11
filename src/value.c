@@ -244,6 +244,11 @@ unsigned int value_array_size(engine_value *arr) {
 	// Non-array or object values are considered to be single-value arrays.
 	return 1;
 }
+static void value_current_key_set(HashTable *ht, engine_value *val) {
+	zval tmp;
+	zend_hash_get_current_key_zval(ht, &tmp);
+	add_next_index_zval(val->internal, &tmp);
+}
 
 engine_value *value_array_keys(engine_value *arr) {
 	HashTable *h = NULL;
@@ -389,8 +394,3 @@ int value_truth(zval *val) {
 	return (Z_TYPE_P(val) == IS_TRUE) ? 1 : ((Z_TYPE_P(val) == IS_FALSE) ? 0 : -1);
 }
 
-static void value_current_key_set(HashTable *ht, engine_value *val) {
-	zval tmp;
-	zend_hash_get_current_key_zval(ht, &tmp);
-	add_next_index_zval(val->internal, &tmp);
-}

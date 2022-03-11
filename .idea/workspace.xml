@@ -5,11 +5,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="06e2f904-2223-4a6c-abae-951b75adff02" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/.gitlab-ci.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gitlab-ci.yml" beforeDir="false" afterPath="$PROJECT_DIR$/.gitlab-ci.yml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.travis.yml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/go.mod" beforeDir="false" afterPath="$PROJECT_DIR$/go.mod" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Makefile" beforeDir="false" afterPath="$PROJECT_DIR$/Makefile" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/php-tools/Dockerfile" beforeDir="false" afterPath="$PROJECT_DIR$/php-tools/Dockerfile" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/php-tools/docker-entrypoint.sh" beforeDir="false" afterPath="$PROJECT_DIR$/php-tools/docker-entrypoint.sh" afterDir="false" />
     </list>
@@ -58,6 +56,11 @@
     <property name="go.watchers.conflict.with.on.save.actions.check.performed" value="true" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="settings.editor.selected.configurable" value="preferences.editor" />
+  </component>
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="\\wsl$\Debian\home\saile\go\src\gitlab.com\sailenicolas\gophp" />
+    </key>
   </component>
   <component name="RunManager" selected="Go Test.receiver_test.go">
     <configuration default="true" type="GoApplicationRunConfiguration" factoryName="Go Application">

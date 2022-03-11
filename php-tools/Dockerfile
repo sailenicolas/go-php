@@ -15,8 +15,13 @@ ENV PHP_CPPFLAGS="${PHP_CFLAGS}"
 ENV PHP_VI="${PHP_VERSION_INSTALL}"
 # Fetch PHP source code. This step does not currently validate keys or checksums, as this process
 # will eventually transition to using the base `php` Docker images.
-ENV FETCH_DEPS="software-properties-common apt-transport-https lsb-release ca-certificates curl"
-RUN set -xe && \
+ENV FETCH_DEPS="apt-utils software-properties-common apt-transport-https lsb-release ca-certificates curl"
+RUN set -e && \
+    { \
+    echo 'Package: *php*'; \
+    echo 'Pin: release a=stable-security'; \
+    echo 'Pin-Priority: -1'; \
+    } > /etc/apt/preferences.d/no-debian-php;\
     apt-get update && \
     apt-get install -y --no-install-recommends ${FETCH_DEPS} && \
     apt-get update

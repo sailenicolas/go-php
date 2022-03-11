@@ -5,7 +5,7 @@ IMPORT_PATH := github.com/sailenicolas/$(NAME)
 VERSION     := $(shell git describe --tags --always --dirty="-dev")
 
 # Generic build options.
-PHP_VERSION		:= 8.1.3
+PHP_VERSION		:= $(firstword $(shell php -i | grep "PHP Version" | sed -e 's/PHP Version =>//g'))
 STATIC			:= false
 DOCKER_IMAGE	:= sailenicolas/$(NAME):$(PHP_VERSION)
 BUILD_IMAGE_LSB	:= $(shell lsb_release -si)
@@ -15,7 +15,6 @@ TAGS := -tags $(BUILD_IMAGE_LSB),$(if $(findstring true, $(STATIC)), static,)php
 
 # Install options.
 PREFIX := /usr
-
 # Default Makefile options.
 VERBOSE := true
 
@@ -30,7 +29,7 @@ build: .build
 ## Run test for all local packages or specified PACKAGE.
 test: .build
 	@echo "Running tests for '$(NAME)'..."
-	@echo "Running tests for '$(TAGS)'..."
+	@echo "Running tests for '$(VERSIONID)'..."
 	$Q $(GO) test $(if $(VERBOSE),-v) $(TAGS) $(if $(PACKAGE),$(PACKAGE),$(PACKAGES))
 	@echo "Running 'vet' for '$(NAME)'..."
 	$Q $(GO) vet $(if $(VERBOSE),-v) $(TAGS) $(if $(PACKAGE),$(PACKAGE),$(PACKAGES))

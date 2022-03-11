@@ -1,3 +1,3 @@
 #!/bin/sh
-sed -xe
+sed -e
 exec "$@"

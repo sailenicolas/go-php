@@ -12,7 +12,7 @@ testgophp81:
             - vendor/
     script:
         - make test
-testgophp8:
+testgophp80:
     image: sailenicolas/gophp:8.0.16
     only:
         - php8

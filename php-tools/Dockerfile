@@ -16,7 +16,7 @@ ENV PHP_VI="${PHP_VERSION_INSTALL}"
 # Fetch PHP source code. This step does not currently validate keys or checksums, as this process
 # will eventually transition to using the base `php` Docker images.
 ENV FETCH_DEPS="apt-utils software-properties-common apt-transport-https lsb-release ca-certificates curl"
-RUN set -e && \
+RUN set -xe && \
     { \
     echo 'Package: *php*'; \
     echo 'Pin: release a=stable-security'; \
@@ -42,4 +42,3 @@ RUN export PHPVERSIONID=$(ls /usr/include/php) && \
     echo 'export PHPVERSIONID=$(ls /usr/include/php)' >> /etc/profile && \
     chmod +x /root/docker-entrypoint.sh;
 ENTRYPOINT ["/root/docker-entrypoint.sh"]
-CMD /bin/sh -c

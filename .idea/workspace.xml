@@ -5,9 +5,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="06e2f904-2223-4a6c-abae-951b75adff02" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.gitlab-ci.yml" beforeDir="false" afterPath="$PROJECT_DIR$/.gitlab-ci.yml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/php7-debian.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Makefile" beforeDir="false" afterPath="$PROJECT_DIR$/Makefile" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/php-tools/Dockerfile" beforeDir="false" afterPath="$PROJECT_DIR$/php-tools/Dockerfile" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/php-tools/docker-entrypoint.sh" beforeDir="false" afterPath="$PROJECT_DIR$/php-tools/docker-entrypoint.sh" afterDir="false" />
     </list>

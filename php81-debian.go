@@ -7,8 +7,8 @@
 // conventions for include and library paths, so we need a specific build tag
 // for building against those packages.
 //
-//go:build Debian && php8 && !static
-// +build Debian,php8,!static
+//go:build Debian && php81 && !static
+// +build Debian,php81,!static
 
 package gophp
 

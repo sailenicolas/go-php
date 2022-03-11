@@ -5,9 +5,8 @@
       <option name="os" value="linux" />
       <option name="customFlags">
         <array>
-          <option value="php8" />
-          <option value="debian" />
-          <option value="static" />
+          <option value="php81" />
+          <option value="Debian" />
         </array>
       </option>
     </buildTags>

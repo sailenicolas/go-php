@@ -2,8 +2,8 @@
 // Use of this source code is governed by the MIT license that can be found in
 // the LICENSE file.
 //
-//go:build !Debian && php8 && !static
-// +build !Debian,php8,!static
+//go:build !Debian && php81 && !static
+// +build !Debian,php81,!static
 
 package gophp
 

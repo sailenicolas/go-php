@@ -94,7 +94,6 @@ void *context_eval(engine_context *context, char *script) {
 		zend_bailout();
 	} zend_end_try();
 
-	zend_destroy_static_vars(op);
 	destroy_op_array(op);
 	efree_size(op, sizeof(zend_op_array));
 

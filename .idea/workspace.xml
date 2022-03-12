@@ -5,14 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="06e2f904-2223-4a6c-abae-951b75adff02" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/gophp.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/gophp.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Makefile" beforeDir="false" afterPath="$PROJECT_DIR$/Makefile" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/php-tools/Dockerfile" beforeDir="false" afterPath="$PROJECT_DIR$/php-tools/Dockerfile" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/php80-debian.go" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/php81-debian.go" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/php81-static.go" beforeDir="false" afterPath="$PROJECT_DIR$/php8-static.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/php81.go" beforeDir="false" afterPath="$PROJECT_DIR$/php8.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/receiver.go" beforeDir="false" afterPath="$PROJECT_DIR$/receiver.go" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />

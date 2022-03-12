@@ -1,0 +1,14 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="receiver_test.go" type="GoTestRunConfiguration" factoryName="Go Test" nameIsGenerated="true">
+    <module name="gophp" />
+    <working_directory value="$PROJECT_DIR$" />
+    <go_parameters value="-tags php81,Debian" />
+    <useCustomBuildTags value="true" />
+    <kind value="FILE" />
+    <package value="github.com/sailenicolas/gophp81" />
+    <directory value="$PROJECT_DIR$" />
+    <filePath value="$PROJECT_DIR$/receiver_test.go" />
+    <framework value="gotest" />
+    <method v="2" />
+  </configuration>
+</component>

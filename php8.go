@@ -2,11 +2,13 @@
 // Use of this source code is governed by the MIT license that can be found in
 // the LICENSE file.
 //
-//go:build !php5 && !php7
-// +build !php5,!php7
+//go:build php8
+// +build php8
 
-package php
+package gophp
 
-// #cgo CFLAGS: -Iinclude/php8 -Isrc/php8
+// #cgo CFLAGS: -I/usr/include/php/phpsrc -Isrc/  -Iinclude/
+// #cgo CFLAGS: -I/usr/include/php/phpsrc/main -I/usr/include/php/phpsrc/Zend
+// #cgo CFLAGS: -I/usr/include/php/phpsrc/TSRM
 // #cgo LDFLAGS: -lphp8
 import "C"

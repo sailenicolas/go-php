@@ -1,41 +1,41 @@
 # Package options.
-NAME        := go-php
+NAME        := gophp
 DESCRIPTION := PHP bindings for the Go programming language
 IMPORT_PATH := github.com/sailenicolas/$(NAME)
 VERSION     := $(shell git describe --tags --always --dirty="-dev")
 
 # Generic build options.
-PHP_VERSION    := 8.1.3
-STATIC         := false
-DOCKER_IMAGE   := sailenicolas/$(NAME):$(PHP_VERSION)
-
+PHP_VERSION		:= $(firstword $(shell php -i | grep "PHP Version" | sed -e 's/PHP Version =>//g'))
+STATIC			:= false
+DOCKER_IMAGE	:= sailenicolas/$(NAME):
+BUILD_IMAGE_LSB	:= $(shell lsb_release -si)
 # Go build options.
 GO   := go
-TAGS := -tags 'php$(word 1,$(subst ., ,$(PHP_VERSION))) $(if $(findstring true,$(STATIC)),static)'
+TAGS := -tags $(BUILD_IMAGE_LSB),$(if $(findstring true, $(STATIC)), static,)php$(word 1,$(subst ., ,$(PHP_VERSION)))
 
 # Install options.
 PREFIX := /usr
-
 # Default Makefile options.
-VERBOSE :=
+VERBOSE := true
 
 # Variables to pass down to sub-invocations of 'make'.
 MAKE_OPTIONS := PHP_VERSION=$(PHP_VERSION) GO=$(GO) PREFIX=$(PREFIX) VERBOSE=$(VERBOSE) STATIC=$(STATIC)
 
 ## Build binary distribution for library.
-build: .build/env/GOPATH/.ok
+build: .build
 	@echo "Building '$(NAME)'..."
 	$Q $(GO) install $(if $(VERBOSE),-v) $(TAGS) $(IMPORT_PATH)
 
 ## Run test for all local packages or specified PACKAGE.
-test: .build/env/GOPATH/.ok
+test: .build
 	@echo "Running tests for '$(NAME)'..."
-	$Q $(GO) test -race $(if $(VERBOSE),-v) $(TAGS) $(if $(PACKAGE),$(PACKAGE),$(PACKAGES))
+	@echo "Running tests for '$(VERSIONID)'..."
+	$Q $(GO) test $(if $(VERBOSE),-v) $(TAGS) $(if $(PACKAGE),$(PACKAGE),$(PACKAGES))
 	@echo "Running 'vet' for '$(NAME)'..."
 	$Q $(GO) vet $(if $(VERBOSE),-v) $(TAGS) $(if $(PACKAGE),$(PACKAGE),$(PACKAGES))
 
 ## Create test coverage report for all local packages or specified PACKAGE.
-cover: .build/env/GOPATH/.ok
+cover: .build
 	@echo "Creating code coverage report for '$(NAME)'..."
 	$Q rm -Rf .build/tmp && mkdir -p .build/tmp
 	$Q for pkg in $(if $(PACKAGE),$(PACKAGE),$(PACKAGES)); do                                    \
@@ -52,7 +52,7 @@ cover: .build/env/GOPATH/.ok
 ## Remove temporary files and packages required for build.
 clean:
 	@echo "Cleaning '$(NAME)'..."
-	$Q $(GO) clean
+	$Q $(GO) clean -cache
 	$Q rm -Rf .build
 
 ## Show usage information for this Makefile.
@@ -73,29 +73,34 @@ help:
 
 # Pull or build Docker image for PHP version specified.
 docker-image:
-	$Q docker image pull $(DOCKER_IMAGE) ||                \
-	   docker build --build-arg=PHP_VERSION=$(PHP_VERSION) --build-arg=STATIC=$(STATIC) \
-	                -t $(DOCKER_IMAGE) -f Dockerfile .     \
+	$Q docker image pull $(DOCKER_IMAGE)8.1.3 ||                \
+	   docker build --build-arg=PHP_VERSION="8.1.3" --build-arg=STATIC=$(STATIC)  \
+	   --build-arg=PHP_VERSION_INSTALL=php8.1 \
+	  -t $(DOCKER_IMAGE)8.1.3 -f "php-tools/Dockerfile" .
+	$Q docker image pull $(DOCKER_IMAGE)8.0.16 ||                \
+	   docker build --build-arg=PHP_VERSION="8.0.16" --build-arg=STATIC=$(STATIC)  \
+	   --build-arg=PHP_VERSION_INSTALL=php8.0 \
+	  -t $(DOCKER_IMAGE)8.0.16 -f "php-tools/Dockerfile" .
 
 # Run Make target in Docker container. For instance, to run 'test', call as 'docker-test'.
 docker-%: docker-image
 	$Q docker run --rm -e GOPATH="/tmp/go"                                  \
-	              -v "$(CURDIR):/tmp/go/src/$(IMPORT_PATH)" $(DOCKER_IMAGE) \
+	              -v "$(CURDIR):/tmp/go/src/$(IMPORT_PATH)" $(DOCKER_IMAGE)$(PHP_VERSION) \
 	                 "$(MAKE) -C /tmp/go/src/$(IMPORT_PATH) $(word 2,$(subst -, ,$@)) $(MAKE_OPTIONS)"
 
-.build/env/GOPATH/.ok:
-	$Q mkdir -p "$(dir .build/env/GOPATH/src/$(IMPORT_PATH))" && touch $@
-	$Q ln -s ../../../../../.. ".build/env/GOPATH/src/$(IMPORT_PATH)"
+.build:
+	$Q mkdir -p "$(dir .build/src/$(IMPORT_PATH))" && touch $@
+	$Q ln -s ../../../.. ".build/src/$(IMPORT_PATH)"
 
 MAKEFILE := $(lastword $(MAKEFILE_LIST))
 Q := $(if $(VERBOSE),,@)
 
 PACKAGES = $(shell (                                                    \
-	cd $(CURDIR)/.build/env/GOPATH/src/$(IMPORT_PATH) &&                \
-	GOPATH=$(CURDIR)/.build/env/GOPATH go list ./... | grep -v "vendor" \
+	cd $(CURDIR)/.build/src/$(IMPORT_PATH) &&                \
+	GOPATH=$(CURDIR)/.build go list ./... | grep -v "vendor" \
 ))
 
-export GOPATH := $(CURDIR)/.build/env/GOPATH
+export GOPATH := $(CURDIR)/.build
 
 BOLD      = \033[1m
 UNDERLINE = \033[4m

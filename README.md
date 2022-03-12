@@ -1,24 +1,28 @@
-# PHP bindings for Go
+# PHP bindings for Go (PHP 8)
+
+## This fork does not work, is an attempt to make it compatible with PHP 8.
 
 [![API Documentation][godoc-svg]][godoc-url] [![MIT License][license-svg]][license-url]
 
 This package implements support for executing PHP scripts, exporting Go variables for use in PHP contexts, attaching Go method receivers as PHP classes and returning PHP variables for use in Go contexts.
 
-Both PHP 5.x and PHP 7.x series are supported.
+Only PHP > 8.1 series are supported.
 
 ## Building
 
-Building this package requires that you have PHP installed as a library. For most Linux systems, this can usually be found in the `php-embed` package, or variations thereof.
+Building this package requires that you have PHP installed as a library. 
+
+For most Linux systems, this can usually be found be installed using `install-php.sh` (debian only) or use the build and compile option with `build-php.sh`.
 
 Once the PHP library is available, the bindings can be compiled with `go build` and are `go get`-able.
 
-**Note**: Building against PHP 5.x requires that the `php5` tag is provided, i.e.:
-
+**Note**: Pull Request are welcome.
+**Note**: Building against PHP 8.1.3 requires that the `php8` tag is provided, i.e.:
 ```bash
-go get -tags php5 github.com/deuill/go-php
+go get -tags php8 gitlab.com/sailenicolas/gophp
 ```
 
-This is due to the fact that PHP 7.x is the default build target.
+There is not a default build target.
 
 ## Status
 
@@ -30,7 +34,7 @@ It is possible to [attach Go method receivers][NewReceiver] as PHP classes, with
 
 ### Caveats
 
-Be aware that, by default, PHP is **not** designed to be used in multithreaded environments (which severely restricts the use of these bindings with Goroutines) if not built with [ZTS support](https://secure.php.net/manual/en/pthreads.requirements.php). However, ZTS support has seen major refactoring between PHP 5 and PHP 7, and as such is currently unsupported by this package.
+Be aware that, by default, PHP is **not** designed to be used in multithreaded environments (which severely restricts the use of these bindings with Goroutines) if not built with [ZTS support](https://secure.php.net/manual/en/pthreads.requirements.php). However, PHP 8 ZTS support has seen major refactoring, and as such is currently unsupported by this package.
 
 Currently, it is recommended to either sync use of seperate Contexts between Goroutines, or share a single Context among all running Goroutines.
 
@@ -47,6 +51,12 @@ These items will be tackled in order of significance (which may not be the order
 
 ## Usage
 
+### Tests
+To run tests is simple enough, just `make test`
+
+### Build a docker image
+To run tests is simple enough, just `make docker-image`
+
 ### Basic
 
 Executing a script is simple:
@@ -55,7 +65,7 @@ Executing a script is simple:
 package main
 
 import (
-    php "github.com/deuill/go-php"
+    php "github.com/sailenicolas/gophp"
     "os"
 )
 
@@ -81,7 +91,7 @@ package main
 
 import (
     "fmt"
-    php "github.com/deuill/go-php"
+    php "github.com/sailenicolas/gophp"
 )
 
 func main() {
@@ -107,13 +117,13 @@ Finally, the value is returned as an `interface{}` using `Value.Interface()` (on
 
 All code in this repository is covered by the terms of the MIT License, the full text of which can be found in the LICENSE file.
 
-[godoc-url]: https://godoc.org/github.com/deuill/go-php
-[godoc-svg]: https://godoc.org/github.com/deuill/go-php?status.svg
+[godoc-url]: https://pkg.go.dev/gitlab.com/sailenicolas/gophp
+[godoc-svg]: https://pkg.go.dev/badge/gitlab.com/sailenicolas/gophp
 
-[license-url]: https://github.com/deuill/go-php/blob/master/LICENSE
+[license-url]: https://gitlab.com/sailenicolas/gophp/blob/master/LICENSE
 [license-svg]: https://img.shields.io/badge/license-MIT-blue.svg
 
-[Context.Exec]: https://godoc.org/github.com/deuill/go-php/engine#Context.Exec
-[Context.Eval]: https://godoc.org/github.com/deuill/go-php/engine#Context.Eval
-[NewValue]:     https://godoc.org/github.com/deuill/go-php/engine#NewValue
-[NewReceiver]:  https://godoc.org/github.com/deuill/go-php/engine#NewReceiver
+[Context.Exec]: https://pkg.go.dev/github.com/gitlab/gophp#Context.Exec
+[Context.Eval]: https://pkg.go.dev/github.com/gitlab/gophp#Context.Eval
+[NewValue]:     https://pkg.go.dev/github.com/gitlab/gophp#NewValue
+[NewReceiver]:  https://pkg.go.dev/github.com/gitlab/gophp#NewReceiver

@@ -2,11 +2,8 @@
 // Use of this source code is governed by the MIT license that can be found in
 // the LICENSE file.
 
-package php
+package gophp
 
-// #cgo CFLAGS: -I/usr/include/php8 -I/usr/include/php8/main -I/usr/include/php8/TSRM
-// #cgo CFLAGS: -I/usr/include/php8/Zend -Iinclude
-//
 // #include <stdlib.h>
 // #include <main/php.h>
 // #include "context.h"
@@ -77,7 +74,7 @@ func (c *Context) Eval(script string) (*Value, error) {
 
 	result, err := C.context_eval(c.context, s)
 	if err != nil {
-		return nil, fmt.Errorf("Error executing script '%s' in context", script)
+		return nil, fmt.Errorf("error executing script '%s' in context %s", script, err.Error())
 	}
 
 	defer C.free(result)

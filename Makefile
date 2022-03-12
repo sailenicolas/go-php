@@ -30,7 +30,7 @@ build: .build
 test: .build
 	@echo "Running tests for '$(NAME)'..."
 	@echo "Running tests for '$(VERSIONID)'..."
-	$Q $(GO) test $(if $(VERBOSE),-v) $(TAGS) $(if $(PACKAGE),$(PACKAGE),$(PACKAGES)) -x
+	$Q $(GO) test $(if $(VERBOSE),-v) $(TAGS) $(if $(PACKAGE),$(PACKAGE),$(PACKAGES))
 	@echo "Running 'vet' for '$(NAME)'..."
 	$Q $(GO) vet $(if $(VERBOSE),-v) $(TAGS) $(if $(PACKAGE),$(PACKAGE),$(PACKAGES))
 

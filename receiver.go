@@ -2,11 +2,8 @@
 // Use of this source code is governed by the MIT license that can be found in
 // the LICENSE file.
 
-package php
+package gophp
 
-// #cgo CFLAGS: -I/usr/include/php8 -I/usr/include/php8/main -I/usr/include/php8/TSRM
-// #cgo CFLAGS: -I/usr/include/php8/Zend -Iinclude
-//
 // #include <stdlib.h>
 // #include <main/php.h>
 // #include "receiver.h"
@@ -22,7 +19,7 @@ import (
 type Receiver struct {
 	name    string
 	create  func(args []interface{}) interface{}
-	objects map[*C.struct__engine_receiver]*ReceiverObject
+	objects map[*C.struct__zend_object]*ReceiverObject
 }
 
 // NewObject instantiates a new method receiver object, using the Receiver's
@@ -35,7 +32,7 @@ func (r *Receiver) NewObject(args []interface{}) (*ReceiverObject, error) {
 	}
 
 	if obj.instance == nil {
-		return nil, fmt.Errorf("Failed to instantiate method receiver")
+		return nil, fmt.Errorf("failed to instantiate method receiver")
 	}
 
 	v := reflect.ValueOf(obj.instance)
@@ -90,7 +87,7 @@ type ReceiverObject struct {
 // error if the property does not exist or is not addressable.
 func (o *ReceiverObject) Get(name string) (*Value, error) {
 	if _, exists := o.values[name]; !exists || !o.values[name].CanInterface() {
-		return nil, fmt.Errorf("Value '%s' does not exist or is not addressable", name)
+		return nil, fmt.Errorf("value '%s' does not exist or is not addressable", name)
 	}
 
 	val, err := NewValue(o.values[name].Interface())

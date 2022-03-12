@@ -2,11 +2,8 @@
 // Use of this source code is governed by the MIT license that can be found in
 // the LICENSE file.
 
-package php
+package gophp
 
-// #cgo CFLAGS: -I/usr/include/php8 -I/usr/include/php8/main -I/usr/include/php8/TSRM
-// #cgo CFLAGS: -I/usr/include/php8/Zend -Iinclude
-//
 // #include <stdlib.h>
 // #include <stdbool.h>
 // #include <main/php.h>
@@ -58,7 +55,7 @@ type Value struct {
 func NewValue(val interface{}) (*Value, error) {
 	ptr, err := C.value_new()
 	if err != nil {
-		return nil, fmt.Errorf("Unable to instantiate PHP value")
+		return nil, fmt.Errorf("unable to instantiate PHP value")
 	}
 
 	v := reflect.ValueOf(val)
@@ -87,7 +84,7 @@ func NewValue(val interface{}) (*Value, error) {
 		for i := 0; i < v.Len(); i++ {
 			vs, err := NewValue(v.Index(i).Interface())
 			if err != nil {
-				C._value_destroy(ptr)
+				C.value_destroy(ptr)
 				return nil, err
 			}
 
@@ -103,7 +100,7 @@ func NewValue(val interface{}) (*Value, error) {
 			for _, key := range v.MapKeys() {
 				kv, err := NewValue(v.MapIndex(key).Interface())
 				if err != nil {
-					C._value_destroy(ptr)
+					C.value_destroy(ptr)
 					return nil, err
 				}
 
@@ -117,7 +114,7 @@ func NewValue(val interface{}) (*Value, error) {
 				}
 			}
 		} else {
-			return nil, fmt.Errorf("Unable to create value of unknown type '%T'", val)
+			return nil, fmt.Errorf("unable to create value of unknown type '%T'", val)
 		}
 	// Bind struct to PHP object (stdClass) type.
 	case reflect.Struct:
@@ -132,7 +129,7 @@ func NewValue(val interface{}) (*Value, error) {
 
 			fv, err := NewValue(v.Field(i).Interface())
 			if err != nil {
-				C._value_destroy(ptr)
+				C.value_destroy(ptr)
 				return nil, err
 			}
 
@@ -142,10 +139,11 @@ func NewValue(val interface{}) (*Value, error) {
 			C.value_object_property_set(ptr, str, fv.value)
 		}
 	case reflect.Invalid:
+		fmt.Println("INVALID")
 		C.value_set_null(ptr)
 	default:
-		C._value_destroy(ptr)
-		return nil, fmt.Errorf("Unable to create value of unknown type '%T'", val)
+		C.value_destroy(ptr)
+		return nil, fmt.Errorf("unable to create value of unknown type '%T'", val)
 	}
 
 	return &Value{value: ptr}, nil
@@ -154,16 +152,16 @@ func NewValue(val interface{}) (*Value, error) {
 // NewValueFromPtr creates a Value type from an existing PHP value pointer.
 func NewValueFromPtr(val unsafe.Pointer) (*Value, error) {
 	if val == nil {
-		return nil, fmt.Errorf("Cannot create value from 'nil' pointer")
+		return nil, fmt.Errorf("cannot create value from 'nil' pointer")
 	}
 
 	ptr, err := C.value_new()
 	if err != nil {
-		return nil, fmt.Errorf("Unable to create new PHP value")
+		return nil, fmt.Errorf("unable to CREATE new PHP value" + err.Error())
 	}
 
 	if _, err := C.value_set_zval(ptr, (*C.zval)(val)); err != nil {
-		return nil, fmt.Errorf("Unable to set PHP value from pointer")
+		return nil, fmt.Errorf("unable to SET PHP value from pointer " + err.Error())
 	}
 
 	return &Value{value: ptr}, nil
@@ -278,6 +276,6 @@ func (v *Value) Destroy() {
 		return
 	}
 
-	C._value_destroy(v.value)
+	C.value_destroy(v.value)
 	v.value = nil
 }

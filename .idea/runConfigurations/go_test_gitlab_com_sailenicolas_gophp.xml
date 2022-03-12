@@ -1,0 +1,16 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="go test gitlab.com/sailenicolas/gophp" type="GoTestRunConfiguration" factoryName="Go Test" nameIsGenerated="true">
+    <module name="gophp" />
+    <working_directory value="$PROJECT_DIR$" />
+    <go_parameters value="-tags php8,Debian" />
+    <useCustomBuildTags value="true" />
+    <kind value="PACKAGE" />
+    <package value="gitlab.com/sailenicolas/gophp" />
+    <directory value="$PROJECT_DIR$" />
+    <filePath value="$PROJECT_DIR$" />
+    <framework value="gotest" />
+    <method v="2">
+      <option name="GoBeforeRunTask" command="clean -cache -testcache" />
+    </method>
+  </configuration>
+</component>

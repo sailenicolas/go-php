@@ -3,6 +3,12 @@
   <component name="Go" enabled="true">
     <buildTags>
       <option name="os" value="linux" />
+      <option name="customFlags">
+        <array>
+          <option value="php8" />
+          <option value="Debian" />
+        </array>
+      </option>
     </buildTags>
   </component>
   <component name="NewModuleRootManager">

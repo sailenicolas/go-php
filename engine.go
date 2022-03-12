@@ -4,10 +4,8 @@
 
 // Package engine provides methods allowing for the initialization and teardown
 // of PHP engine bindings, off which execution contexts can be launched.
-package php
+package gophp
 
-// #cgo CFLAGS: -I/usr/include/php8 -I/usr/include/php8/main -I/usr/include/php8/TSRM
-// #cgo CFLAGS: -I/usr/include/php8/Zend -Iinclude
 //
 // #include <stdlib.h>
 // #include <main/php.h>
@@ -40,7 +38,6 @@ func New() (*Engine, error) {
 	if engine != nil {
 		return nil, fmt.Errorf("Cannot activate multiple engine instances")
 	}
-
 	ptr, err := C.engine_init()
 	if err != nil {
 		return nil, fmt.Errorf("PHP engine failed to initialize")
@@ -61,7 +58,7 @@ func New() (*Engine, error) {
 func (e *Engine) NewContext() (*Context, error) {
 	ptr, err := C.context_new()
 	if err != nil {
-		return nil, fmt.Errorf("Failed to initialize context for PHP engine")
+		return nil, fmt.Errorf("Failed to initialize context for PHP engine" + err.Error())
 	}
 
 	ctx := &Context{
@@ -84,6 +81,7 @@ func (e *Engine) NewContext() (*Context, error) {
 // The constructor function accepts a slice of arguments, as passed by the PHP
 // context, and should return a method receiver instance, or nil on error (in
 // which case, an exception is thrown on the PHP object constructor).
+
 func (e *Engine) Define(name string, fn func(args []interface{}) interface{}) error {
 	if _, exists := e.receivers[name]; exists {
 		return fmt.Errorf("Failed to define duplicate receiver '%s'", name)
@@ -92,12 +90,11 @@ func (e *Engine) Define(name string, fn func(args []interface{}) interface{}) er
 	rcvr := &Receiver{
 		name:    name,
 		create:  fn,
-		objects: make(map[*C.struct__engine_receiver]*ReceiverObject),
+		objects: make(map[*C.struct__zend_object]*ReceiverObject),
 	}
-
 	n := C.CString(name)
-	defer C.free(unsafe.Pointer(n))
 
+	defer C.free(unsafe.Pointer(n))
 	C.receiver_define(n)
 	e.receivers[name] = rcvr
 
@@ -190,7 +187,7 @@ func engineSetHeader(ctx *C.struct__engine_context, operation C.uint, buffer uns
 }
 
 //export engineReceiverNew
-func engineReceiverNew(rcvr *C.struct__engine_receiver, args unsafe.Pointer) C.int {
+func engineReceiverNew(rcvr *C.struct__zend_object, args unsafe.Pointer) C.int {
 	n := C.GoString(C._receiver_get_name(rcvr))
 	if engine == nil || engine.receivers[n] == nil {
 		return 1
@@ -214,7 +211,7 @@ func engineReceiverNew(rcvr *C.struct__engine_receiver, args unsafe.Pointer) C.i
 }
 
 //export engineReceiverGet
-func engineReceiverGet(rcvr *C.struct__engine_receiver, name *C.char) unsafe.Pointer {
+func engineReceiverGet(rcvr *C.struct__zend_object, name *C.char) unsafe.Pointer {
 	n := C.GoString(C._receiver_get_name(rcvr))
 	if engine == nil || engine.receivers[n].objects[rcvr] == nil {
 		return nil
@@ -229,7 +226,7 @@ func engineReceiverGet(rcvr *C.struct__engine_receiver, name *C.char) unsafe.Poi
 }
 
 //export engineReceiverSet
-func engineReceiverSet(rcvr *C.struct__engine_receiver, name *C.char, val unsafe.Pointer) {
+func engineReceiverSet(rcvr *C.struct__zend_object, name *C.char, val unsafe.Pointer) {
 	n := C.GoString(C._receiver_get_name(rcvr))
 	if engine == nil || engine.receivers[n].objects[rcvr] == nil {
 		return
@@ -244,7 +241,7 @@ func engineReceiverSet(rcvr *C.struct__engine_receiver, name *C.char, val unsafe
 }
 
 //export engineReceiverExists
-func engineReceiverExists(rcvr *C.struct__engine_receiver, name *C.char) C.int {
+func engineReceiverExists(rcvr *C.struct__zend_object, name *C.char) C.int {
 	n := C.GoString(C._receiver_get_name(rcvr))
 	if engine == nil || engine.receivers[n].objects[rcvr] == nil {
 		return 0
@@ -258,7 +255,7 @@ func engineReceiverExists(rcvr *C.struct__engine_receiver, name *C.char) C.int {
 }
 
 //export engineReceiverCall
-func engineReceiverCall(rcvr *C.struct__engine_receiver, name *C.char, args unsafe.Pointer) unsafe.Pointer {
+func engineReceiverCall(rcvr *C.struct__zend_object, name *C.char, args unsafe.Pointer) unsafe.Pointer {
 	n := C.GoString(C._receiver_get_name(rcvr))
 	if engine == nil || engine.receivers[n].objects[rcvr] == nil {
 		return nil

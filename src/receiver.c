@@ -50,49 +50,20 @@ static void receiver_new(INTERNAL_FUNCTION_PARAMETERS) {
 	array_init_size(&args, ZEND_NUM_ARGS());
 
 	if (zend_copy_parameters_array(ZEND_NUM_ARGS(), &args) == FAILURE) {
-		zend_throw_exception(NULL, "Could not parse parameters for method receiver", 0);
+		zend_throw_error(NULL, "Could not parse parameters for method receiver", 0);
 	} else {
 		// Create receiver instance. Throws an exception if creation fails.
 		int result = engineReceiverNew(Z_OBJ_P(getThis()), (void *) &args);
 		if (result != 0) {
-			zend_throw_exception(NULL, "Failed to instantiate method receiver", 0);
+			zend_throw_error(NULL, "Failed to instantiate method receiver", 0);
 		}
 	}
 
 	zval_dtor(&args);
 }
 
-// Fetch and return function definition for method receiver. The method call
-// happens in the method handler, as returned by this function.
-static zend_internal_function *receiver_method_get(zend_object *object) {
-	zend_internal_function *func = emalloc(sizeof(zend_internal_function));
 
-	func->type     = ZEND_INTERNAL_FUNCTION;
-	func->handler  = NULL;
-	func->arg_info = NULL;
-	func->num_args = 0;
-	func->scope    = object->ce;
-	func->fn_flags = ZEND_ACC_CALL_VIA_HANDLER;
 
-	return func;
-}
-
-// Fetch and return constructor function definition for method receiver. The
-// construct call happens in the constructor handler, as returned by this
-// function.
-static zend_internal_function *receiver_constructor_get(zend_object *object) {
-	static zend_internal_function func;
-
-	func.type     = ZEND_INTERNAL_FUNCTION;
-	func.handler  = receiver_new;
-	func.arg_info = NULL;
-	func.num_args = 0;
-	func.scope    = object->ce;
-	func.fn_flags = 0;
-	func.function_name = object->ce->name;
-
-	return &func;
-}
 
 static const zend_function_entry receiver_define_methods[] = {
 	ZEND_FE_END
@@ -156,16 +127,42 @@ static int receiver_has_property(zend_object *object, zend_string *member, int h
 static int _receiver_method_call(zend_string *method, zend_object *object, INTERNAL_FUNCTION_PARAMETERS) {
 return receiver_method_call(method->val, INTERNAL_FUNCTION_PARAM_PASSTHRU);
 }
+// Fetch and return function definition for method receiver. The method call
+// happens in the method handler, as returned by this function.
 
 static zend_function *receiver_get_method(zend_object **object, zend_string *name, const zval *key) {
-	zend_internal_function *func = receiver_method_get(*object);
+	zend_internal_function *func;
+	func = emalloc(sizeof(zend_internal_function));
+ 	memset(func, 0, sizeof(zend_internal_function));
+ 	func->type     = ZEND_INTERNAL_FUNCTION;
+    func->handler  = receiver_new;
+    func->arg_info = NULL;
+    func->num_args = 0;
+    func->scope    = (*object)->ce;
+    func->fn_flags = ZEND_ACC_CALL_VIA_HANDLER;
+
 	func->function_name = zend_string_copy(name);
 	return (zend_function *) func;
 }
+// Fetch and return constructor function definition for method receiver. The
+// construct call happens in the constructor handler, as returned by this
+// function.
 
-static zend_function *receiver_get_constructor(zend_object *object) {
-	zend_internal_function *func = receiver_constructor_get(object);
-	zend_set_function_arg_flags((zend_function *) func);
+static zend_function *receiver_get_constructor(zend_object *object, zend_string *name) {
+	zend_internal_function *func;
+	if (EXPECTED(EG(trampoline).common.function_name == NULL)) {
+	   func = (zend_internal_function *) &EG(trampoline);
+	} else {
+	    func = emalloc(sizeof(zend_internal_function));
+	}
+	memset(func, 0, sizeof(zend_internal_function));
+	func->type				= ZEND_INTERNAL_FUNCTION;
+	func->handler			= receiver_new;
+	func->arg_info			= NULL;
+	func->num_args			= 0;
+	func->scope				= object->ce;
+	func->fn_flags = ZEND_ACC_CALL_VIA_HANDLER;
+   	func->function_name = zend_string_copy(name);
 
 	return (zend_function *) func;
 }
@@ -180,11 +177,6 @@ zend_object_std_dtor(object);
 // Return class name for method receiver.
 char *_receiver_get_name(zend_object *rcvr) {
 	return rcvr->ce->name->val;
-}
-
-static void receiver_handlers_set(zend_object_handlers *receiver_handlers) {
-receiver_handlers->free_obj = receiver_free_obj;
-receiver_handlers->get_class_name  = (&std_object_handlers)->get_class_name;
 }
 
 static zval *receiver_read_dimension(zend_object * object, zval *value, int val, zval * dimension){
@@ -225,51 +217,26 @@ static int receiver_compare(zval *value, zval *val){
 
 }
 
-static zend_object_handlers receiver_handlers = 	{
-0, 								/* offset of real object header (usually zero)  */
-receiver_free_obj,				/* zend_object_std_dtor,			free_obj;				required */
-receiver_destroy_object,		/* zend_objects_destroy_object,     dtor_obj;   			required */
-NULL, 							/* zend_objects_clone_obj,          clone_obj;  			optional */
-
-receiver_read_property,     	/* 									read_property; 			required */
-receiver_write_property,     	/* 									write_property; 		required */
-
-receiver_read_dimension,		/* zend_std_read_dimension,			read_dimension; 		required */
-receiver_write_dimension,		/* zend_std_write_dimension,  		write_dimension; 		required */
-receiver_get_property_ptr_ptr,	/* zend_std_get_property_ptr_ptr, 	get_property_ptr_ptr; 	required */
-
-receiver_has_property,    		/* 							 		has_property; 			required */
-
-receiver_unset_property,		/* zend_std_unset_property,   		unset_property;    		required */
-receiver_has_dimension,			/* zend_std_has_dimension,    		has_dimension;     		required */
-receiver_unset_dimension,		/* zend_std_unset_dimension,  		unset_dimension;   		required */
-receiver_get_properties,		/* zend_std_get_properties,   		get_properties;    		required */
-
-receiver_get_method,  			/* 									get_method;  			required */
-receiver_get_constructor,		/* 									get_constructor; 		required */
-
-receiver_get_class_name,		/* zend_std_get_class_name,  		get_class_name;     	required */
-receiver_cast_object,    		/* 									cast_object;    		required */
-NULL,    						/* 									count_elements;   		optional */
-NULL,							/* zend_std_get_debug_info,  		get_debug_info;     	optional */
-NULL,							/* zend_std_get_closure,    		get_closure;        	optional */
-receiver_get_gc,				/* zend_std_get_gc,    				get_gc;             	required */
-NULL,    						/* 									do_operation;  			optional */
-receiver_compare,    			/* 									compare;      			required */
-NULL 							/* 									get_properties_for;  	optional */
-};
+static zend_object_handlers receiver_handlers;
 // Initialize instance of method receiver object. The method receiver itself is
 // attached in the constructor function call.
 static zend_object * receiver_init(zend_class_entry *class_type) {
-	zend_object *object = zend_objects_new(class_type);
-	object->handlers = &receiver_handlers;
-	object_properties_init(object, class_type);
-	return object;
+	zend_object *obj = zend_objects_new(class_type);
+	object_properties_init(obj, class_type);
+	obj->handlers = &receiver_handlers;
+	return obj;
 }
 void receiver_define(char *name) {
-	zend_class_entry tmp;
-	INIT_CLASS_ENTRY(tmp, name, NULL);
-	zend_class_entry *this = zend_register_internal_class(&tmp);
-   	this->create_object = receiver_init;
-	this->ce_flags |= ZEND_ACC_FINAL;
+	memcpy(&receiver_handlers, zend_get_std_object_handlers(),
+		sizeof(zend_object_handlers));
+
+	zend_class_entry ce;
+
+	INIT_CLASS_ENTRY_EX(ce, *name, strlen(*name) - 1, NULL);
+
+	zend_class_entry *class_t = zend_register_internal_class(&ce);
+
+   	class_t->create_object = receiver_init;
+
+	class_t->ce_flags |= ZEND_ACC_FINAL;
 }

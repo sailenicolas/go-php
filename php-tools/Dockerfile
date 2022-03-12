@@ -34,11 +34,13 @@ RUN curl -vksSLo /usr/share/keyrings/deb.sury.org-php.gpg https://packages.sury.
     apt-get upgrade -y && \
     apt-get dist-upgrade -y && \
     export CFLAGS="${PHP_CFLAGS}" CPPFLAGS="${PHP_CPPFLAGS}" LDFLAGS="${PHP_LDFLAGS}"; \
-    apt-get install -y --no-install-recommends ${BUILD_DEPS};
+    apt-get install -y --no-install-recommends ${BUILD_DEPS} &&\
+    ln -sT "/usr/include/php/$(ls /usr/include/php)" /usr/include/php/phpsrc
 COPY php-tools/docker-entrypoint.sh /root/
 RUN export PHPVERSIONID=$(ls /usr/include/php) && \
     export arch="$(dpkg-architecture --query DEB_BUILD_GNU_TYPE)" &&\
     export multiarch="$(dpkg-architecture --query DEB_BUILD_MULTIARCH)" && \
     echo 'export PHPVERSIONID=$(ls /usr/include/php)' >> /etc/profile && \
     chmod +x /root/docker-entrypoint.sh;
-ENTRYPOINT ["/root/docker-entrypoint.sh"]
+CMD ["/bin/sh", "-c"]
+

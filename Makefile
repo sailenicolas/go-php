@@ -7,7 +7,7 @@ VERSION     := $(shell git describe --tags --always --dirty="-dev")
 # Generic build options.
 PHP_VERSION		:= $(firstword $(shell php -i | grep "PHP Version" | sed -e 's/PHP Version =>//g'))
 STATIC			:= false
-DOCKER_IMAGE	:= sailenicolas/$(NAME):$(PHP_VERSION)
+DOCKER_IMAGE	:= sailenicolas/$(NAME):
 BUILD_IMAGE_LSB	:= $(shell lsb_release -si)
 # Go build options.
 GO   := go
@@ -30,7 +30,7 @@ build: .build
 test: .build
 	@echo "Running tests for '$(NAME)'..."
 	@echo "Running tests for '$(VERSIONID)'..."
-	$Q $(GO) test $(if $(VERBOSE),-v) $(TAGS) $(if $(PACKAGE),$(PACKAGE),$(PACKAGES))
+	$Q $(GO) test $(if $(VERBOSE),-v) $(TAGS) $(if $(PACKAGE),$(PACKAGE),$(PACKAGES)) -x
 	@echo "Running 'vet' for '$(NAME)'..."
 	$Q $(GO) vet $(if $(VERBOSE),-v) $(TAGS) $(if $(PACKAGE),$(PACKAGE),$(PACKAGES))
 
@@ -73,15 +73,19 @@ help:
 
 # Pull or build Docker image for PHP version specified.
 docker-image:
-	$Q docker image pull $(DOCKER_IMAGE) ||                \
-	   docker build --build-arg=PHP_VERSION=$(PHP_VERSION) --build-arg=STATIC=$(STATIC)  \
-	   --build-arg=PHP_VERSION_INSTALL=php$(word 1,$(subst ., ,$(PHP_VERSION))).$(word 2,$(subst ., ,$(PHP_VERSION))) \
-	  -t $(DOCKER_IMAGE) -f php-tools/Dockerfile .     \
+	$Q docker image pull $(DOCKER_IMAGE)8.1.3 ||                \
+	   docker build --build-arg=PHP_VERSION="8.1.3" --build-arg=STATIC=$(STATIC)  \
+	   --build-arg=PHP_VERSION_INSTALL=php8.1 \
+	  -t $(DOCKER_IMAGE)8.1.3 -f "php-tools/Dockerfile" .
+	$Q docker image pull $(DOCKER_IMAGE)8.0.16 ||                \
+	   docker build --build-arg=PHP_VERSION="8.0.16" --build-arg=STATIC=$(STATIC)  \
+	   --build-arg=PHP_VERSION_INSTALL=php8.0 \
+	  -t $(DOCKER_IMAGE)8.0.16 -f "php-tools/Dockerfile" .
 
 # Run Make target in Docker container. For instance, to run 'test', call as 'docker-test'.
 docker-%: docker-image
 	$Q docker run --rm -e GOPATH="/tmp/go"                                  \
-	              -v "$(CURDIR):/tmp/go/src/$(IMPORT_PATH)" $(DOCKER_IMAGE) \
+	              -v "$(CURDIR):/tmp/go/src/$(IMPORT_PATH)" $(DOCKER_IMAGE)$(PHP_VERSION) \
 	                 "$(MAKE) -C /tmp/go/src/$(IMPORT_PATH) $(word 2,$(subst -, ,$@)) $(MAKE_OPTIONS)"
 
 .build:

@@ -25,8 +25,7 @@ engine_context *context_new() {
 
 	// Initialize request lifecycle.
 	if (php_request_startup() == FAILURE) {
-
-	printf("Something wrong");
+		zend_throw_error(NULL, "Something wrong", 0);
 		SG(server_context) = NULL;
 		free(context);
 
@@ -47,12 +46,12 @@ void context_exec(engine_context *context, char *filename) {
 		zend_stream_init_filename(&script, filename);
 		ret = php_execute_script(&script);
 		if (ret == FAILURE) {
-        	printf("Failed to execute PHP script.\n");
+        	zend_throw_error(NULL, "Failed to execute PHP script", 0);
         }
         zend_destroy_file_handle(&script);
 	} zend_catch {
 		errno = 1;
-	    printf("Something went wrong, PHP script.\n");
+	    zend_throw_error(NULL, "Failed to execute PHP script", 0);
 		return;
 	} zend_end_try();
 
@@ -78,7 +77,7 @@ void *context_eval(engine_context *context, char *script) {
 	zend_string_release(str);
 	// Return error if script failed to compile.
 	if (!op) {
-	printf("Wrong ");
+	    zend_throw_error(NULL, "Failed to execute PHP script", 0);
 		errno = 1;
 		return NULL;
 	}

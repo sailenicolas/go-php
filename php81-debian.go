@@ -6,6 +6,7 @@
 // distributions. Debian builds its PHP7 packages with non-standard naming
 // conventions for include and library paths, so we need a specific build tag
 // for building against those packages.
+// -g -Wall -Wextra
 //
 //go:build Debian && php81 && !static
 // +build Debian,php81,!static
@@ -15,6 +16,5 @@ package gophp
 // #cgo CFLAGS: -I/usr/include/php/20210902 -Isrc/ -Iinclude/
 // #cgo CFLAGS: -I/usr/include/php/20210902/main -I/usr/include/php/20210902/Zend
 // #cgo CFLAGS: -I/usr/include/php/20210902/TSRM
-// #cgo CFLAGS: -g -Wall -Wextra
 // #cgo LDFLAGS: -lphp8
 import "C"

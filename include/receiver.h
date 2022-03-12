@@ -5,10 +5,6 @@
 #ifndef __RECEIVER_H__
 #define __RECEIVER_H__
 
-typedef struct _engine_receiver {
-	zend_object obj;
-} engine_receiver;
-
 void receiver_define(char *name);
 void receiver_destroy(char *name);
 /*
@@ -30,6 +26,6 @@ static void receiver_handlers_set(zend_object_handlers *handlers);
 static void handlers_init();
 */
 
-char *_receiver_get_name(engine_receiver *rcvr);
+char *_receiver_get_name(zend_object *rcvr);
 #endif
 

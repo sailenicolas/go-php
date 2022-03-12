@@ -19,7 +19,7 @@ import (
 type Receiver struct {
 	name    string
 	create  func(args []interface{}) interface{}
-	objects map[*C.struct__engine_receiver]*ReceiverObject
+	objects map[*C.struct__zend_object]*ReceiverObject
 }
 
 // NewObject instantiates a new method receiver object, using the Receiver's

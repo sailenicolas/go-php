@@ -139,6 +139,7 @@ func NewValue(val interface{}) (*Value, error) {
 			C.value_object_property_set(ptr, str, fv.value)
 		}
 	case reflect.Invalid:
+		fmt.Println("INVALID")
 		C.value_set_null(ptr)
 	default:
 		C.value_destroy(ptr)

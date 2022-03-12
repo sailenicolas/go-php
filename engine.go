@@ -90,7 +90,7 @@ func (e *Engine) Define(name string, fn func(args []interface{}) interface{}) er
 	rcvr := &Receiver{
 		name:    name,
 		create:  fn,
-		objects: make(map[*C.struct__engine_receiver]*ReceiverObject),
+		objects: make(map[*C.struct__zend_object]*ReceiverObject),
 	}
 	n := C.CString(name)
 
@@ -187,7 +187,7 @@ func engineSetHeader(ctx *C.struct__engine_context, operation C.uint, buffer uns
 }
 
 //export engineReceiverNew
-func engineReceiverNew(rcvr *C.struct__engine_receiver, args unsafe.Pointer) C.int {
+func engineReceiverNew(rcvr *C.struct__zend_object, args unsafe.Pointer) C.int {
 	n := C.GoString(C._receiver_get_name(rcvr))
 	if engine == nil || engine.receivers[n] == nil {
 		return 1
@@ -211,7 +211,7 @@ func engineReceiverNew(rcvr *C.struct__engine_receiver, args unsafe.Pointer) C.i
 }
 
 //export engineReceiverGet
-func engineReceiverGet(rcvr *C.struct__engine_receiver, name *C.char) unsafe.Pointer {
+func engineReceiverGet(rcvr *C.struct__zend_object, name *C.char) unsafe.Pointer {
 	n := C.GoString(C._receiver_get_name(rcvr))
 	if engine == nil || engine.receivers[n].objects[rcvr] == nil {
 		return nil
@@ -226,7 +226,7 @@ func engineReceiverGet(rcvr *C.struct__engine_receiver, name *C.char) unsafe.Poi
 }
 
 //export engineReceiverSet
-func engineReceiverSet(rcvr *C.struct__engine_receiver, name *C.char, val unsafe.Pointer) {
+func engineReceiverSet(rcvr *C.struct__zend_object, name *C.char, val unsafe.Pointer) {
 	n := C.GoString(C._receiver_get_name(rcvr))
 	if engine == nil || engine.receivers[n].objects[rcvr] == nil {
 		return
@@ -241,7 +241,7 @@ func engineReceiverSet(rcvr *C.struct__engine_receiver, name *C.char, val unsafe
 }
 
 //export engineReceiverExists
-func engineReceiverExists(rcvr *C.struct__engine_receiver, name *C.char) C.int {
+func engineReceiverExists(rcvr *C.struct__zend_object, name *C.char) C.int {
 	n := C.GoString(C._receiver_get_name(rcvr))
 	if engine == nil || engine.receivers[n].objects[rcvr] == nil {
 		return 0
@@ -255,7 +255,7 @@ func engineReceiverExists(rcvr *C.struct__engine_receiver, name *C.char) C.int {
 }
 
 //export engineReceiverCall
-func engineReceiverCall(rcvr *C.struct__engine_receiver, name *C.char, args unsafe.Pointer) unsafe.Pointer {
+func engineReceiverCall(rcvr *C.struct__zend_object, name *C.char, args unsafe.Pointer) unsafe.Pointer {
 	n := C.GoString(C._receiver_get_name(rcvr))
 	if engine == nil || engine.receivers[n].objects[rcvr] == nil {
 		return nil

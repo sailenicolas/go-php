@@ -93,7 +93,6 @@ static void receiver_method_handler(INTERNAL_FUNCTION_PARAMETERS) {
 }
 // Fetch and return function definition for method receiver. The method call
 // happens in the method handler, as returned by this function.
-//TODO: BEFORE IT WAS ZEND_OVERLOADED_FUNCTION, NOW IS ZEND_INTERNAL_FUNCTION REVIEW IT.
 static zend_function *get_receiver_method(zend_object **object, zend_string *name, const zval *key) {
    zend_internal_function *func;
     func = emalloc(sizeof(zend_internal_function));

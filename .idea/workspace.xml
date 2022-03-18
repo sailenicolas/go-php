@@ -12,7 +12,6 @@
     <list default="true" id="06e2f904-2223-4a6c-abae-951b75adff02" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/include/gophp_receiver.c" beforeDir="false" afterPath="$PROJECT_DIR$/include/gophp_receiver.c" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/receiver_test.go" beforeDir="false" afterPath="$PROJECT_DIR$/receiver_test.go" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

@@ -10,15 +10,9 @@ typedef struct _php_engine {
 } php_engine;
 
 php_engine *engine_init(void);
-<<<<<<< HEAD:include/gophp_engine.h
 
 void engine_shutdown();
 
-=======
-
-void engine_shutdown(php_engine *engine);
-
->>>>>>> master:include/engine.h
 //static size_t engine_ub_write(const char *str, size_t len);
 
 //static char *engine_read_cookies();

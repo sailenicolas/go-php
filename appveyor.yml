@@ -12,6 +12,7 @@ branches:
 init:
     - git config --global core.autocrlf input
     - sudo rm -rf /usr/go/src/gitlab.com/${username}/${project}
+    - sudo mkdir -p /usr/go/src/gitlab.com/${username}/${project}
 
 clone_folder: /usr/go/src/gitlab.com/${username}/${project}
 

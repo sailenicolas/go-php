@@ -1,5 +1,5 @@
 # appveyor.yml
-build: on
+build: off
 # branches to build
 image: Ubuntu
 
@@ -11,6 +11,7 @@ branches:
 # scripts that are called at very beginning, before repo cloning
 init:
     - git config --global core.autocrlf input
+    - bash -c "./php-tools/install-php.sh"
 
 clone_folder: /usr/go/src/gitlab.com/${username}/${project}
 
@@ -32,7 +33,6 @@ build_script:
             $env:VCVARS_PLATFORM="amd64"
             $env:ENV_PLATFORM="x64"
           }
-    - bash -c "./php-tools/install-php.sh"
 
 after_build:
 

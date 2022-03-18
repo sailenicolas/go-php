@@ -1,0 +1,8 @@
+name: Setup
+runs:
+    using: composite
+    steps:
+        - shell: bash
+          run: |
+              set -x
+              ./.github/scripts/install.sh

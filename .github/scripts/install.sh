@@ -15,15 +15,15 @@ RELEASE_ID=$(lsb_release -si)
 PHP_PACKAGES="php8.1-dev php8.1-common php8.1-embed php8.1-cli php8.1-opcache libphp8.1-embed php8.1-readline php8.1-opcache php8.1-xml php8.1 php-common"
 if [ "${RELEASE_ID}" == "Debian" ]; then
   curl -sSLo /usr/share/keyrings/deb.sury.org-php.gpg https://packages.sury.org/php/apt.gpg &&
-    echo "deb [signed-by=/usr/share/keyrings/deb.sury.org-php.gpg] https://packages.sury.org/php/ $(lsb_release -sc) main" >/etc/apt/sources.list.d/php.list
+    sudo echo "deb [signed-by=/usr/share/keyrings/deb.sury.org-php.gpg] https://packages.sury.org/php/ $(lsb_release -sc) main" >/etc/apt/sources.list.d/php.list
+  set -xe &&
+		 {
+		 echo 'Package: *php*'
+		 echo 'Pin: release a=stable-security'
+		 echo 'Pin-Priority: -1'
+		} >/etc/apt/preferences.d/no-debian-php
 elif [ "${RELEASE_ID}" == "Ubuntu" ]; then
   LC_ALL=C.UTF-8 sudo add-apt-repository ppa:ondrej/php -y
-  set -xe &&
-    sudo {
-      echo 'Package: *php*'
-      echo 'Pin: release a=stable-security'
-      echo 'Pin-Priority: -1'
-    } >/etc/apt/preferences.d/no-debian-php
 fi
 sudo apt-get update &&
   export CFLAGS="${PHP_CFLAGS}" CPPFLAGS="${PHP_CPPFLAGS}" LDFLAGS="${PHP_LDFLAGS}"

@@ -1,7 +1,7 @@
 #!/bin/bash
 # Environment variables used across the build.
-export PHP_VERSION="8.1.3"
-export PHP_IV=php8.1
+PHP_VERSION="8.1.3"
+PHP_IV=php8.1
 
 # Fetch PHP source code. This step does not currently validate keys or checksums, as this process
 # will eventually transition to using the base `php` Docker images.

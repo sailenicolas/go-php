@@ -3,6 +3,7 @@
   <component name="AutoImportSettings">
     <option name="autoReloadType" value="ALL" />
   </component>
+<<<<<<< HEAD
   <component name="CMakeSettings">
     <configurations>
       <configuration PROFILE_NAME="Debug" ENABLED="true" CONFIG_NAME="Debug" />
@@ -12,15 +13,25 @@
     <list default="true" id="06e2f904-2223-4a6c-abae-951b75adff02" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.github/scripts/install.sh" beforeDir="false" afterPath="$PROJECT_DIR$/.github/scripts/install.sh" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+=======
+  <component name="ChangeListManager">
+    <list default="true" id="06e2f904-2223-4a6c-abae-951b75adff02" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/runConfigurations/go_test_gitlab_com_sailenicolas_gophp.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/runConfigurations/go_test_gitlab_com_sailenicolas_gophp.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/receiver.c" beforeDir="false" afterPath="$PROJECT_DIR$/src/receiver.c" afterDir="false" />
+>>>>>>> master
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
+<<<<<<< HEAD
   <component name="ClangdSettings">
     <option name="formatViaClangd" value="false" />
   </component>
+=======
+>>>>>>> master
   <component name="GOROOT" url="file://$PROJECT_DIR$/../../../../../sdk/go1.17.7" />
   <component name="Git.Settings">
     <option name="RECENT_BRANCH_BY_REPOSITORY">
@@ -30,6 +41,7 @@
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
+<<<<<<< HEAD
   <component name="GitRewordedCommitMessages">
     <option name="commitMessagesMapping">
       <RewordedCommitMessageMapping>
@@ -48,6 +60,8 @@
       <filtered-out-file-type name="COMMIT_BY_MESSAGE" />
     </file-type-list>
   </component>
+=======
+>>>>>>> master
   <component name="GoLibraries">
     <option name="indexEntireGoPath" value="false" />
     <option name="urls">
@@ -69,10 +83,14 @@
   <component name="PropertiesComponent">
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+<<<<<<< HEAD
     <property name="RunOnceActivity.cidr.known.project.marker" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="cf.first.check.clang-format" value="false" />
     <property name="cidr.known.project.marker" value="true" />
+=======
+    <property name="WebServerToolWindowFactoryState" value="false" />
+>>>>>>> master
     <property name="com.intellij.ide.scratch.ScratchImplUtil$2/New Scratch File" value="TEXT" />
     <property name="configurable.GoLibrariesConfigurable.is.expanded" value="true" />
     <property name="go.formatter.settings.were.checked" value="true" />
@@ -81,8 +99,11 @@
     <property name="go.sdk.automatically.set" value="true" />
     <property name="go.watchers.conflict.with.on.save.actions.check.performed" value="true" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+<<<<<<< HEAD
     <property name="nodejs_package_manager_path" value="npm" />
     <property name="run.code.analysis.last.selected.profile" value="pProject Default" />
+=======
+>>>>>>> master
     <property name="settings.editor.selected.configurable" value="preferences.editor" />
   </component>
   <component name="RecentsManager">
@@ -117,6 +138,7 @@
       <item itemvalue="Go Test.engine_test.go" />
       <item itemvalue="Go Test.receiver_test.go" />
       <item itemvalue="Go Test.value_test.go" />
+<<<<<<< HEAD
     </list>
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
@@ -132,6 +154,12 @@
     </task>
     <servers />
   </component>
+=======
+      <item itemvalue="Go Test.context_test.go" />
+    </list>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+>>>>>>> master
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
   </component>

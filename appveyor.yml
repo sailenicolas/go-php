@@ -11,11 +11,8 @@ branches:
 # scripts that are called at very beginning, before repo cloning
 init:
     - git config --global core.autocrlf input
-    - sudo rm /usr/go/src/gitlab.com/${username}/${project}
-    - sudo mkdir -p /usr/go/src/gitlab.com/${username}/${project}
-    - ls /usr/go/src/gitlab.com/
 
-clone_folder: /usr/go/src/gitlab.com/${username}/${project}
+clone_folder: /usr/go/src/gitlab.com/sailenicolas/gophp
 
 environment:
     GOPATH: /usr/go/

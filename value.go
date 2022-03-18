@@ -7,7 +7,7 @@ package gophp
 // #include <stdlib.h>
 // #include <stdbool.h>
 // #include <main/php.h>
-// #include "value.h"
+// #include "include/gophp_object.h"
 import "C"
 
 import (
@@ -34,7 +34,7 @@ const (
 
 // Value represents a PHP value.
 type Value struct {
-	value *C.struct__engine_value
+	value *C.struct__gophp_object
 }
 
 // NewValue creates a PHP value representation of a Go value val. Available
@@ -53,7 +53,7 @@ type Value struct {
 // receivers to PHP functions and classes are only available in the engine scope,
 // and must be predeclared before context execution.
 func NewValue(val interface{}) (*Value, error) {
-	ptr, err := C.value_new()
+	ptr, err := C.new_gophp_object()
 	if err != nil {
 		return nil, fmt.Errorf("unable to instantiate PHP value")
 	}
@@ -64,53 +64,53 @@ func NewValue(val interface{}) (*Value, error) {
 	switch v.Kind() {
 	// Bind integer to PHP int type.
 	case reflect.Int, reflect.Int8, reflect.Int16, reflect.Int32, reflect.Int64:
-		C.value_set_long(ptr, C.long(v.Int()))
+		C.gophp_object_set_long(ptr, C.long(v.Int()))
 	// Bind floating point number to PHP double type.
 	case reflect.Float32, reflect.Float64:
-		C.value_set_double(ptr, C.double(v.Float()))
+		C.gophp_object_set_double(ptr, C.double(v.Float()))
 	// Bind boolean to PHP bool type.
 	case reflect.Bool:
-		C.value_set_bool(ptr, C.bool(v.Bool()))
+		C.gophp_object_set_bool(ptr, C.bool(v.Bool()))
 	// Bind string to PHP string type.
 	case reflect.String:
 		str := C.CString(v.String())
 		defer C.free(unsafe.Pointer(str))
 
-		C.value_set_string(ptr, str)
+		C.gophp_object_set_string(ptr, str)
 	// Bind slice to PHP indexed array type.
 	case reflect.Slice:
-		C.value_set_array(ptr, C.uint(v.Len()))
+		C.gophp_object_set_array(ptr, C.uint(v.Len()))
 
 		for i := 0; i < v.Len(); i++ {
 			vs, err := NewValue(v.Index(i).Interface())
 			if err != nil {
-				C.value_destroy(ptr)
+				C.destroy_gophp_object(ptr)
 				return nil, err
 			}
 
-			C.value_array_next_set(ptr, vs.value)
+			C.gophp_object_set_array_next(ptr, vs.value)
 		}
 	// Bind map (with integer or string keys) to PHP associative array type.
 	case reflect.Map:
 		kt := v.Type().Key().Kind()
 
 		if kt == reflect.Int || kt == reflect.String {
-			C.value_set_array(ptr, C.uint(v.Len()))
+			C.gophp_object_set_array(ptr, C.uint(v.Len()))
 
 			for _, key := range v.MapKeys() {
 				kv, err := NewValue(v.MapIndex(key).Interface())
 				if err != nil {
-					C.value_destroy(ptr)
+					C.destroy_gophp_object(ptr)
 					return nil, err
 				}
 
 				if kt == reflect.Int {
-					C.value_array_index_set(ptr, C.ulong(key.Int()), kv.value)
+					C.gophp_object_set_array_index(ptr, C.ulong(key.Int()), kv.value)
 				} else {
 					str := C.CString(key.String())
 					defer C.free(unsafe.Pointer(str))
 
-					C.value_array_key_set(ptr, str, kv.value)
+					C.gophp_object_set_array_key(ptr, str, kv.value)
 				}
 			}
 		} else {
@@ -118,7 +118,7 @@ func NewValue(val interface{}) (*Value, error) {
 		}
 	// Bind struct to PHP object (stdClass) type.
 	case reflect.Struct:
-		C.value_set_object(ptr)
+		C.gophp_object_set_object(ptr)
 		vt := v.Type()
 
 		for i := 0; i < v.NumField(); i++ {
@@ -129,20 +129,21 @@ func NewValue(val interface{}) (*Value, error) {
 
 			fv, err := NewValue(v.Field(i).Interface())
 			if err != nil {
-				C.value_destroy(ptr)
+				C.destroy_gophp_object(ptr)
 				return nil, err
 			}
 
 			str := C.CString(vt.Field(i).Name)
 			defer C.free(unsafe.Pointer(str))
 
-			C.value_object_property_set(ptr, str, fv.value)
+			C.gophp_object_set_object_property(ptr, str, fv.value)
 		}
 	case reflect.Invalid:
 		fmt.Println("INVALID")
-		C.value_set_null(ptr)
+		fmt.Println(v.Kind())
+		C.gophp_object_set_null(ptr)
 	default:
-		C.value_destroy(ptr)
+		C.destroy_gophp_object(ptr)
 		return nil, fmt.Errorf("unable to create value of unknown type '%T'", val)
 	}
 
@@ -155,13 +156,13 @@ func NewValueFromPtr(val unsafe.Pointer) (*Value, error) {
 		return nil, fmt.Errorf("cannot create value from 'nil' pointer")
 	}
 
-	ptr, err := C.value_new()
+	ptr, err := C.new_gophp_object()
 	if err != nil {
 		return nil, fmt.Errorf("unable to CREATE new PHP value" + err.Error())
 	}
 
-	if _, err := C.value_set_zval(ptr, (*C.zval)(val)); err != nil {
-		return nil, fmt.Errorf("unable to SET PHP value from pointer " + err.Error())
+	if _, err := C.gophp_object_set_zval(ptr, (*C.zval)(val)); err != nil {
+		return nil, fmt.Errorf("\n unable to SET PHP value from pointer\nerror:%s\n kind: %d", err.Error(), ptr.kind)
 	}
 
 	return &Value{value: ptr}, nil
@@ -169,7 +170,7 @@ func NewValueFromPtr(val unsafe.Pointer) (*Value, error) {
 
 // Kind returns the Value's concrete kind of type.
 func (v *Value) Kind() ValueKind {
-	return (ValueKind)(C.value_kind(v.value))
+	return (ValueKind)(C.gophp_object_get_kind(v.value))
 }
 
 // Interface returns the internal PHP value as it lies, with no conversion step.
@@ -194,23 +195,23 @@ func (v *Value) Interface() interface{} {
 
 // Int returns the internal PHP value as an integer, converting if necessary.
 func (v *Value) Int() int64 {
-	return (int64)(C.value_get_long(v.value))
+	return (int64)(C.gophp_object_get_long(v.value))
 }
 
 // Float returns the internal PHP value as a floating point number, converting
 // if necessary.
 func (v *Value) Float() float64 {
-	return (float64)(C.value_get_double(v.value))
+	return (float64)(C.gophp_object_get_double(v.value))
 }
 
 // Bool returns the internal PHP value as a boolean, converting if necessary.
 func (v *Value) Bool() bool {
-	return (bool)(C.value_get_bool(v.value))
+	return (bool)(C.gophp_object_get_bool(v.value))
 }
 
 // String returns the internal PHP value as a string, converting if necessary.
 func (v *Value) String() string {
-	str := C.value_get_string(v.value)
+	str := C.gophp_object_get_string(v.value)
 	defer C.free(unsafe.Pointer(str))
 
 	return C.GoString(str)
@@ -219,13 +220,13 @@ func (v *Value) String() string {
 // Slice returns the internal PHP value as a slice of interface types. Non-array
 // values are implicitly converted to single-element slices.
 func (v *Value) Slice() []interface{} {
-	size := (int)(C.value_array_size(v.value))
+	size := (int)(C.gophp_object_array_size(v.value))
 	val := make([]interface{}, size)
 
-	C.value_array_reset(v.value)
+	C.gophp_object_array_reset(v.value)
 
 	for i := 0; i < size; i++ {
-		t := &Value{value: C.value_array_next_get(v.value)}
+		t := &Value{value: C.gophp_object_get_array_next(v.value)}
 
 		val[i] = t.Interface()
 		t.Destroy()
@@ -239,19 +240,19 @@ func (v *Value) Slice() []interface{} {
 // with a key of '0'.
 func (v *Value) Map() map[string]interface{} {
 	val := make(map[string]interface{})
-	keys := &Value{value: C.value_array_keys(v.value)}
+	keys := &Value{value: C.gophp_object_array_keys(v.value)}
 
 	for _, k := range keys.Slice() {
 		switch key := k.(type) {
 		case int64:
-			t := &Value{value: C.value_array_index_get(v.value, C.ulong(key))}
+			t := &Value{value: C.gophp_object_get_array_index(v.value, C.ulong(key))}
 			sk := strconv.Itoa((int)(key))
 
 			val[sk] = t.Interface()
 			t.Destroy()
 		case string:
 			str := C.CString(key)
-			t := &Value{value: C.value_array_key_get(v.value, str)}
+			t := &Value{value: C.gophp_object_get_array_key(v.value, str)}
 			C.free(unsafe.Pointer(str))
 
 			val[key] = t.Interface()
@@ -276,6 +277,6 @@ func (v *Value) Destroy() {
 		return
 	}
 
-	C.value_destroy(v.value)
+	C.destroy_gophp_object(v.value)
 	v.value = nil
 }

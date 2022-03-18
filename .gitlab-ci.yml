@@ -6,6 +6,7 @@ testgophp81:
     image: sailenicolas/gophp:8.1.3
     only:
         - php8
+        - php8ws
     cache:
         key: "$CI_COMMIT_REF_SLUG"
         paths:
@@ -13,9 +14,10 @@ testgophp81:
     script:
         - make test
 testgophp80:
-    image: sailenicolas/gophp:8.0.16
+    image: sailenicolas/gophp:8.0.17
     only:
         - php8
+        - php8ws
     cache:
         key: "$CI_COMMIT_REF_SLUG"
         paths:

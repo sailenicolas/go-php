@@ -9,9 +9,9 @@ package gophp
 //
 // #include <stdlib.h>
 // #include <main/php.h>
-// #include "receiver.h"
-// #include "context.h"
-// #include "engine.h"
+// #include "include/gophp_receiver.h"
+// #include "include/gophp_context.h"
+// #include "include/gophp_engine.h"
 import "C"
 
 import (
@@ -25,7 +25,7 @@ import (
 // Engine represents the core PHP engine bindings.
 type Engine struct {
 	engine    *C.struct__php_engine
-	contexts  map[*C.struct__engine_context]*Context
+	contexts  map[*C.struct__gophp_context]*Context
 	receivers map[string]*Receiver
 }
 
@@ -45,10 +45,9 @@ func New() (*Engine, error) {
 
 	engine = &Engine{
 		engine:    ptr,
-		contexts:  make(map[*C.struct__engine_context]*Context),
+		contexts:  make(map[*C.struct__gophp_context]*Context),
 		receivers: make(map[string]*Receiver),
 	}
-
 	return engine, nil
 }
 
@@ -56,7 +55,7 @@ func New() (*Engine, error) {
 // an error if the execution context failed to initialize at any point. This
 // corresponds to PHP's RINIT (request init) phase.
 func (e *Engine) NewContext() (*Context, error) {
-	ptr, err := C.context_new()
+	ptr, err := C.new_context()
 	if err != nil {
 		return nil, fmt.Errorf("Failed to initialize context for PHP engine" + err.Error())
 	}
@@ -118,11 +117,11 @@ func (e *Engine) Destroy() {
 	}
 
 	e.contexts = nil
-
-	C.engine_shutdown(e.engine)
+	C.engine_shutdown()
+	C.free(unsafe.Pointer(e.engine))
 	e.engine = nil
-
 	engine = nil
+
 }
 
 func write(w io.Writer, buffer unsafe.Pointer, length C.uint) C.int {
@@ -140,7 +139,7 @@ func write(w io.Writer, buffer unsafe.Pointer, length C.uint) C.int {
 }
 
 //export engineWriteOut
-func engineWriteOut(ctx *C.struct__engine_context, buffer unsafe.Pointer, length C.uint) C.int {
+func engineWriteOut(ctx *C.struct__gophp_context, buffer unsafe.Pointer, length C.uint) C.int {
 	if engine == nil || engine.contexts[ctx] == nil {
 		return -1
 	}
@@ -149,7 +148,7 @@ func engineWriteOut(ctx *C.struct__engine_context, buffer unsafe.Pointer, length
 }
 
 //export engineWriteLog
-func engineWriteLog(ctx *C.struct__engine_context, buffer unsafe.Pointer, length C.uint) C.int {
+func engineWriteLog(ctx *C.struct__gophp_context, buffer unsafe.Pointer, length C.uint) C.int {
 	if engine == nil || engine.contexts[ctx] == nil {
 		return -1
 	}
@@ -158,7 +157,7 @@ func engineWriteLog(ctx *C.struct__engine_context, buffer unsafe.Pointer, length
 }
 
 //export engineSetHeader
-func engineSetHeader(ctx *C.struct__engine_context, operation C.uint, buffer unsafe.Pointer, length C.uint) {
+func engineSetHeader(ctx *C.struct__gophp_context, operation C.uint, buffer unsafe.Pointer, length C.uint) {
 	if engine == nil || engine.contexts[ctx] == nil {
 		return
 	}
@@ -188,31 +187,31 @@ func engineSetHeader(ctx *C.struct__engine_context, operation C.uint, buffer uns
 
 //export engineReceiverNew
 func engineReceiverNew(rcvr *C.struct__zend_object, args unsafe.Pointer) C.int {
-	n := C.GoString(C._receiver_get_name(rcvr))
+	n := C.GoString(C.get_receiver_name(rcvr))
 	if engine == nil || engine.receivers[n] == nil {
+		fmt.Println("ENGINE IS NULL")
 		return 1
 	}
 
 	va, err := NewValueFromPtr(args)
 	if err != nil {
-		return 1
+		fmt.Println(err.Error())
+		return 110
 	}
 
 	defer va.Destroy()
 
 	obj, err := engine.receivers[n].NewObject(va.Slice())
 	if err != nil {
-		return 1
+		return 12
 	}
-
 	engine.receivers[n].objects[rcvr] = obj
-
 	return 0
 }
 
 //export engineReceiverGet
 func engineReceiverGet(rcvr *C.struct__zend_object, name *C.char) unsafe.Pointer {
-	n := C.GoString(C._receiver_get_name(rcvr))
+	n := C.GoString(C.get_receiver_name(rcvr))
 	if engine == nil || engine.receivers[n].objects[rcvr] == nil {
 		return nil
 	}
@@ -227,7 +226,7 @@ func engineReceiverGet(rcvr *C.struct__zend_object, name *C.char) unsafe.Pointer
 
 //export engineReceiverSet
 func engineReceiverSet(rcvr *C.struct__zend_object, name *C.char, val unsafe.Pointer) {
-	n := C.GoString(C._receiver_get_name(rcvr))
+	n := C.GoString(C.get_receiver_name(rcvr))
 	if engine == nil || engine.receivers[n].objects[rcvr] == nil {
 		return
 	}
@@ -242,7 +241,7 @@ func engineReceiverSet(rcvr *C.struct__zend_object, name *C.char, val unsafe.Poi
 
 //export engineReceiverExists
 func engineReceiverExists(rcvr *C.struct__zend_object, name *C.char) C.int {
-	n := C.GoString(C._receiver_get_name(rcvr))
+	n := C.GoString(C.get_receiver_name(rcvr))
 	if engine == nil || engine.receivers[n].objects[rcvr] == nil {
 		return 0
 	}
@@ -256,7 +255,7 @@ func engineReceiverExists(rcvr *C.struct__zend_object, name *C.char) C.int {
 
 //export engineReceiverCall
 func engineReceiverCall(rcvr *C.struct__zend_object, name *C.char, args unsafe.Pointer) unsafe.Pointer {
-	n := C.GoString(C._receiver_get_name(rcvr))
+	n := C.GoString(C.get_receiver_name(rcvr))
 	if engine == nil || engine.receivers[n].objects[rcvr] == nil {
 		return nil
 	}

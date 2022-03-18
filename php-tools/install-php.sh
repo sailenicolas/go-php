@@ -26,8 +26,6 @@ elif [ "${RELEASE_ID}" == "Ubuntu" ]; then
     } >/etc/apt/preferences.d/no-debian-php
 fi
 apt-get update &&
-  apt-get upgrade -y &&
-  apt-get dist-upgrade -y &&
   export CFLAGS="${PHP_CFLAGS}" CPPFLAGS="${PHP_CPPFLAGS}" LDFLAGS="${PHP_LDFLAGS}"
 apt-get install -y --no-install-recommends ${PHP_PACKAGES}
 ln -sT "/usr/include/php/$(ls /usr/include/php)" /usr/include/php/phpsrc

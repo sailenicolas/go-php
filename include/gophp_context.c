@@ -25,7 +25,7 @@ gophp_context *new_context() {
 
     // Initialize request lifecycle.
     if (php_request_startup() == FAILURE) {
-        zend_throw_error(NULL, "Something wrong", 0);
+        zend_throw_error(NULL, "Something wrong");
         SG(server_context) = NULL;
         free(context);
         errno = 1;
@@ -45,14 +45,14 @@ void context_exec(gophp_context *context, char *filename) {
         zend_stream_init_filename(&script, filename);
         ret = zend_execute_scripts(ZEND_REQUIRE, NULL, 1, &script);
         if (ret == FAILURE) {
-            zend_throw_error(NULL, "Failed to execute PHP script", 0);
+            zend_throw_error(NULL, "Failed to execute PHP script");
         }
         zend_destroy_file_handle(&script);
     }
     zend_catch
     {
         errno = ret;
-        zend_throw_error(NULL, "Failed to execute PHP script", 0);
+        zend_throw_error(NULL, "Failed to execute PHP script");
         return;
     }
     zend_end_try();
@@ -73,7 +73,7 @@ zval *context_eval(gophp_context *context, char *script) {
     zend_string_release(str);
     // Return error if script failed to compile.
     if (!op) {
-        zend_throw_error(NULL, "Failed to execute PHP script", 0);
+        zend_throw_error(NULL, "Failed to execute PHP script");
         errno = 1;
         return NULL;
     }

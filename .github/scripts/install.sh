@@ -6,9 +6,9 @@ PHP_VERSION="8.1.3"
 # will eventually transition to using the base `php` Docker images.
 export FETCH_DEPS="dpkg-dev software-properties-common apt-transport-https lsb-release ca-certificates curl"
 set -xe &&
-  apt-get update &&
-  apt-get install -y --no-install-recommends ${FETCH_DEPS} &&
-  apt-get update
+  sudo apt-get update &&
+  sudo apt-get install -y --no-install-recommends ${FETCH_DEPS} &&
+  sudo apt-get update
 
 RELEASE_ID=$(lsb_release -si)
 # Build PHP library from source.
@@ -17,7 +17,7 @@ if [ "${RELEASE_ID}" == "Debian" ]; then
   curl -sSLo /usr/share/keyrings/deb.sury.org-php.gpg https://packages.sury.org/php/apt.gpg &&
     echo "deb [signed-by=/usr/share/keyrings/deb.sury.org-php.gpg] https://packages.sury.org/php/ $(lsb_release -sc) main" >/etc/apt/sources.list.d/php.list
 elif [ "${RELEASE_ID}" == "Ubuntu" ]; then
-  LC_ALL=C.UTF-8 ${SUDO} add-apt-repository ppa:ondrej/php -y
+  LC_ALL=C.UTF-8 sudo add-apt-repository ppa:ondrej/php -y
   set -xe &&
     {
       echo 'Package: *php*'
@@ -25,9 +25,9 @@ elif [ "${RELEASE_ID}" == "Ubuntu" ]; then
       echo 'Pin-Priority: -1'
     } >/etc/apt/preferences.d/no-debian-php
 fi
-apt-get update &&
+sudo apt-get update &&
   export CFLAGS="${PHP_CFLAGS}" CPPFLAGS="${PHP_CPPFLAGS}" LDFLAGS="${PHP_LDFLAGS}"
-apt-get install -y --no-install-recommends ${PHP_PACKAGES}
+sudo apt-get install -y --no-install-recommends ${PHP_PACKAGES}
 ln -sT "/usr/include/php/$(ls /usr/include/php)" /usr/include/php/phpsrc
 export PHPVERSIONID=$(ls /usr/include/php) &&
   export arch="$(dpkg-architecture --query DEB_BUILD_GNU_TYPE)" &&

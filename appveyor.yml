@@ -30,7 +30,7 @@ build_script:
 after_build:
 
 test_script:
-    - go test gitlab.com/sailenicolas/gophp -v
+    - make test
 
 on_finish:
 

@@ -1,7 +1,5 @@
 # PHP 8.1 bindings for Go
 
-## This fork does not work yet, is an attempt.
-
 [![API Documentation][godoc-svg]][godoc-url] [![MIT License][license-svg]][license-url] [![Build status][appveyor-svg]][appveyor-url]  [![pipeline status][gitlab-ci-svg]][gitlab-ci-url]  [![Latest Release](https://gitlab.com/sailenicolas/gophp/-/badges/release.svg)](https://gitlab.com/sailenicolas/gophp/-/releases)
 
 This package implements support for executing PHP scripts, exporting Go variables for use in PHP contexts, attaching Go method receivers as PHP classes and returning PHP variables for use in Go contexts.

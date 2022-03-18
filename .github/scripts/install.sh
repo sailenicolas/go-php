@@ -19,7 +19,7 @@ if [ "${RELEASE_ID}" == "Debian" ]; then
 elif [ "${RELEASE_ID}" == "Ubuntu" ]; then
   LC_ALL=C.UTF-8 sudo add-apt-repository ppa:ondrej/php -y
   set -xe &&
-    {
+    sudo {
       echo 'Package: *php*'
       echo 'Pin: release a=stable-security'
       echo 'Pin-Priority: -1'
@@ -28,7 +28,7 @@ fi
 sudo apt-get update &&
   export CFLAGS="${PHP_CFLAGS}" CPPFLAGS="${PHP_CPPFLAGS}" LDFLAGS="${PHP_LDFLAGS}"
 sudo apt-get install -y --no-install-recommends ${PHP_PACKAGES}
-ln -sT "/usr/include/php/$(ls /usr/include/php)" /usr/include/php/phpsrc
+sudo ln -sT "/usr/include/php/$(ls /usr/include/php)" /usr/include/php/phpsrc
 export PHPVERSIONID=$(ls /usr/include/php) &&
   export arch="$(dpkg-architecture --query DEB_BUILD_GNU_TYPE)" &&
   export multiarch="$(dpkg-architecture --query DEB_BUILD_MULTIARCH)" &&

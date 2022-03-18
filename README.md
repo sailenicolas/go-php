@@ -1,28 +1,25 @@
-# PHP bindings for Go (PHP 8)
+# PHP 8.1 bindings for Go
 
-## This fork does not work, is an attempt to make it compatible with PHP 8.
-
-[![API Documentation][godoc-svg]][godoc-url] [![MIT License][license-svg]][license-url]
+[![API Documentation][godoc-svg]][godoc-url] [![MIT License][license-svg]][license-url] [![Build status][appveyor-svg]][appveyor-url]  [![pipeline status][gitlab-ci-svg]][gitlab-ci-url]  [![Latest Release](https://gitlab.com/sailenicolas/gophp/-/badges/release.svg)](https://gitlab.com/sailenicolas/gophp/-/releases)
 
 This package implements support for executing PHP scripts, exporting Go variables for use in PHP contexts, attaching Go method receivers as PHP classes and returning PHP variables for use in Go contexts.
 
-Only PHP > 8.1 series are supported.
+PHP 8.1 series are supported. 
 
 ## Building
 
-Building this package requires that you have PHP installed as a library. 
+Building this package requires that you have PHP installed as a library.
 
 For most Linux systems, this can usually be found be installed using `install-php.sh` (debian only) or use the build and compile option with `build-php.sh`.
 
 Once the PHP library is available, the bindings can be compiled with `go build` and are `go get`-able.
 
-**Note**: Pull Request are welcome.
-**Note**: Building against PHP 8.1.3 requires that the `php8` tag is provided, i.e.:
+**Note**: `go mod vendor` does not work with CGO, see [Include cgo source files in go mod vendor #47894 ](https://github.com/golang/go/issues/47894):
 ```bash
-go get -tags php8 gitlab.com/sailenicolas/gophp
+go get gitlab.com/sailenicolas/gophp
 ```
 
-There is not a default build target.
+There is no tag because php8.1 only is supported. (It can work on php8.0 though)
 
 ## Status
 
@@ -42,10 +39,10 @@ Currently, it is recommended to either sync use of seperate Contexts between Gor
 
 Currently, the package lacks in several respects:
 
-  * ZTS/multi-threading support. This basically means using Go-PHP in Goroutines is severely limited.
-  * Documentation and examples, both package-level and external.
-  * Performance. There's no reason to believe Go-PHP suffers from any serious performance issues in particular, but adding benchmarks, especially compared against vanilla PHP, might help.
-  * Your feature request here?
+* ZTS/multi-threading support. This basically means using Go-PHP in Goroutines is severely limited.
+* Documentation and examples, both package-level and external.
+* Performance. There's no reason to believe Go-PHP suffers from any serious performance issues in particular, but adding benchmarks, especially compared against vanilla PHP, might help.
+* Your feature request here?
 
 These items will be tackled in order of significance (which may not be the order shown above).
 
@@ -119,6 +116,10 @@ All code in this repository is covered by the terms of the MIT License, the full
 
 [godoc-url]: https://pkg.go.dev/gitlab.com/sailenicolas/gophp
 [godoc-svg]: https://pkg.go.dev/badge/gitlab.com/sailenicolas/gophp
+[appveyor-svg]: https://ci.appveyor.com/api/projects/status/50bwj61ex85grtv9/branch/php8?svg=true
+[appveyor-url]: https://ci.appveyor.com/project/sailenicolas/gophp-0dern/branch/php8
+[gitlab-ci-svg]: https://gitlab.com/sailenicolas/gophp/badges/php8/pipeline.svg
+[gitlab-ci-url]: https://gitlab.com/sailenicolas/gophp/-/commits/php8
 
 [license-url]: https://gitlab.com/sailenicolas/gophp/blob/master/LICENSE
 [license-svg]: https://img.shields.io/badge/license-MIT-blue.svg

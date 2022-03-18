@@ -19,10 +19,6 @@ var valueNewTests = []struct {
 	expected interface{}
 }{
 	{
-		nil,
-		nil,
-	},
-	{
 		42,
 		int64(42),
 	},
@@ -417,6 +413,7 @@ var valueSliceTests = []struct {
 	value    interface{}
 	expected interface{}
 }{
+
 	{
 		42,
 		[]interface{}{int64(42)},

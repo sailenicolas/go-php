@@ -122,11 +122,14 @@ var receiverDefineTests = []struct {
 func TestReceiverDefine(t *testing.T) {
 	var w bytes.Buffer
 
-	c, _ := e.NewContext()
+	c, err := e.NewContext()
+	if err != nil {
+		t.Fatalf("Engine NEW Context, failing: %s", err.Error())
+	}
 	c.Output = &w
 
 	if err := e.Define("TestReceiver", newTestReceiver); err != nil {
-		t.Fatalf("Engine.Define(): Failed to define method receiver: %s", err)
+		t.Fatalf("Engine.Define(): Failed to define method receiver: %s", err.Error())
 	}
 
 	// Attempting to define a receiver twice should fail.
@@ -137,7 +140,7 @@ func TestReceiverDefine(t *testing.T) {
 	for _, tt := range receiverDefineTests {
 		_, err := c.Eval(tt.script)
 		if err != nil {
-			t.Errorf("Context.Eval('%s'): %s", tt.script, err)
+			t.Errorf("Context.Eval('%s'): %s", tt.script, err.Error())
 			continue
 		}
 

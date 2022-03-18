@@ -4,14 +4,18 @@
 
 #ifndef __CONTEXT_H__
 #define __CONTEXT_H__
-typedef struct _engine_context {
-} engine_context;
+typedef struct _gophp_context {
+} gophp_context;
 
-engine_context *context_new();
-void context_exec(engine_context *context, char *filename);
-void *context_eval(engine_context *context, char *script);
-void context_bind(engine_context *context, char *name, void *value);
-void context_destroy(engine_context *context);
+gophp_context *new_context();
+
+void context_exec(gophp_context *context, char *filename);
+
+zval *context_eval(gophp_context *context, char *script);
+
+void context_bind(gophp_context *context, char *name, void *value);
+
+void context_destroy(gophp_context *context);
 //static void _context_bind(char *name, zval *value);
 //static void _context_eval(zend_op_array *op, zval *ret);
 

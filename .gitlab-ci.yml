@@ -6,21 +6,21 @@ testgophp81:
     image: sailenicolas/gophp:8.1.3
     only:
         - php8
-    cache:
-        key: "$CI_COMMIT_REF_SLUG"
-        paths:
-            - vendor/
+#    cache:
+#        key: "$CI_COMMIT_REF_SLUG"
+#        paths:
+#            - vendor/
     script:
         - make test
-testgophp80:
-    image: sailenicolas/gophp:8.0.16
-    only:
-        - php8
-    cache:
-        key: "$CI_COMMIT_REF_SLUG"
-        paths:
-            - vendor/
-    script:
-        - make test
+#testgophp80:
+#    image: sailenicolas/gophp:8.0.17
+#    only:
+#        - php8
+#    cache:
+#        key: "$CI_COMMIT_REF_SLUG"
+#        paths:
+#            - vendor/
+#    script:
+#        - make test
 
 

@@ -1,0 +1,36 @@
+# appveyor.yml
+build: off
+# branches to build
+image: Ubuntu
+
+branches:
+    # whitelist
+    only:
+        - master
+# scripts that are called at very beginning, before repo cloning
+init:
+    - git config --global core.autocrlf input
+
+clone_folder: /usr/go/src/gitlab.com/sailenicolas/gophp
+
+environment:
+    GOPATH: /usr/go/
+
+stack: go 1.17.7
+
+before_test:
+
+install:
+
+build_script:
+    -  sudo chmod +x ./php-tools/install-php.sh
+    -  sudo ./php-tools/install-php.sh
+
+after_build:
+
+test_script:
+    - make test
+
+on_finish:
+
+deploy:

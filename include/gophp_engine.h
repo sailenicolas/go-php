@@ -11,7 +11,7 @@ typedef struct _php_engine {
 
 php_engine *engine_init(void);
 
-void engine_shutdown(php_engine *engine);
+void engine_shutdown();
 
 //static size_t engine_ub_write(const char *str, size_t len);
 

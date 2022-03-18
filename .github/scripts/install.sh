@@ -8,10 +8,12 @@ export FETCH_DEPS="dpkg-dev software-properties-common apt-transport-https lsb-r
 set -xe &&
   sudo apt-get update &&
   sudo apt-get install -y --no-install-recommends ${FETCH_DEPS} &&
+  sudo apt-get purge php7.4* php8.0* --autoremove -y
   sudo apt-get update
 export PHPVERSIONID=$(ls /usr/include/php) &&
 export arch="$(dpkg-architecture --query DEB_BUILD_GNU_TYPE)" &&
 export multiarch="$(dpkg-architecture --query DEB_BUILD_MULTIARCH)"
+export CFLAGS="${PHP_CFLAGS}" CPPFLAGS="${PHP_CPPFLAGS}" LDFLAGS="${PHP_LDFLAGS}"
 
 RELEASE_ID=$(lsb_release -si)
 # Build PHP library from source.
@@ -29,8 +31,7 @@ if [ "${RELEASE_ID}" == "Debian" ]; then
 elif [ "${RELEASE_ID}" == "Ubuntu" ]; then
   LC_ALL=C.UTF-8 sudo add-apt-repository ppa:ondrej/php -y
 fi
-sudo apt-get update && sudo apt-get upgrade -y
-export CFLAGS="${PHP_CFLAGS}" CPPFLAGS="${PHP_CPPFLAGS}" LDFLAGS="${PHP_LDFLAGS}"
+sudo apt-get update
 sudo apt-get install -y --no-install-recommends ${PHP_PACKAGES}
+sudo ls -la "/usr/include/php/$(ls /usr/include/php)"
 sudo ln -sT "/usr/include/php/$(ls /usr/include/php)" /usr/include/php/phpsrc
-sudo ls -la "/usr/include/php/phpsrc"

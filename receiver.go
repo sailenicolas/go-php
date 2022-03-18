@@ -6,7 +6,14 @@ package gophp
 
 // #include <stdlib.h>
 // #include <main/php.h>
-// #include "receiver.h"
+// #include <ext/date/php_date.h>
+// #include <ext/standard/url.h>
+// #include <ext/standard/info.h>
+// #include <ext/standard/php_array.h>
+// #include <ext/standard/php_var.h>
+// #include <ext/standard/basic_functions.h>
+// #include <ext/standard/php_http.h>
+// #include "include/gophp_receiver.h"
 import "C"
 
 import (
@@ -22,6 +29,13 @@ type Receiver struct {
 	objects map[*C.struct__zend_object]*ReceiverObject
 }
 
+// ReceiverObject represents an object instance of a pre-defined method receiver.
+type ReceiverObject struct {
+	instance interface{}
+	values   map[string]reflect.Value
+	methods  map[string]reflect.Value
+}
+
 // NewObject instantiates a new method receiver object, using the Receiver's
 // create function and passing in a slice of values as a parameter.
 func (r *Receiver) NewObject(args []interface{}) (*ReceiverObject, error) {
@@ -30,9 +44,8 @@ func (r *Receiver) NewObject(args []interface{}) (*ReceiverObject, error) {
 		values:   make(map[string]reflect.Value),
 		methods:  make(map[string]reflect.Value),
 	}
-
 	if obj.instance == nil {
-		return nil, fmt.Errorf("failed to instantiate method receiver")
+		return nil, fmt.Errorf("failed to instantiate method receiver %s", r.name)
 	}
 
 	v := reflect.ValueOf(obj.instance)
@@ -67,20 +80,12 @@ func (r *Receiver) Destroy() {
 	if r.create == nil {
 		return
 	}
-
 	n := C.CString(r.name)
-	defer C.free(unsafe.Pointer(n))
+	C.destroy_receiver(n)
 
-	C.receiver_destroy(n)
+	defer C.free(unsafe.Pointer(n))
 	r.create = nil
 	r.objects = nil
-}
-
-// ReceiverObject represents an object instance of a pre-defined method receiver.
-type ReceiverObject struct {
-	instance interface{}
-	values   map[string]reflect.Value
-	methods  map[string]reflect.Value
 }
 
 // Get returns a named internal property of the receiver object instance, or an

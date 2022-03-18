@@ -6,7 +6,7 @@ package gophp
 
 // #include <stdlib.h>
 // #include <main/php.h>
-// #include "context.h"
+// #include "include/gophp_context.h"
 import "C"
 
 import (
@@ -27,7 +27,7 @@ type Context struct {
 	// Header represents the HTTP headers set by current PHP context.
 	Header http.Header
 
-	context *C.struct__engine_context
+	context *C.struct__gophp_context
 	values  []*Value
 }
 
@@ -71,15 +71,13 @@ func (c *Context) Exec(filename string) error {
 func (c *Context) Eval(script string) (*Value, error) {
 	s := C.CString(script)
 	defer C.free(unsafe.Pointer(s))
-
 	result, err := C.context_eval(c.context, s)
 	if err != nil {
 		return nil, fmt.Errorf("error executing script '%s' in context %s", script, err.Error())
 	}
+	defer C.free(unsafe.Pointer(result))
 
-	defer C.free(result)
-
-	val, err := NewValueFromPtr(result)
+	val, err := NewValueFromPtr(unsafe.Pointer(result))
 	if err != nil {
 		return nil, err
 	}

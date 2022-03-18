@@ -1,2 +1,2 @@
 
-#include "src/receiver.c"
+#include "include/gophp_receiver.c"

@@ -1,0 +1,44 @@
+# appveyor.yml
+build: on
+# branches to build
+image: Ubuntu
+
+branches:
+    # whitelist
+    only:
+        - php8
+        - php8ws
+# scripts that are called at very beginning, before repo cloning
+init:
+    - git config --global core.autocrlf input
+
+clone_folder: /usr/go/src/gitlab.com/${username}/${project}
+
+environment:
+    GOPATH: /usr/go/
+
+stack: go 1.17.7
+
+before_test:
+
+install:
+
+build_script:
+    - ps: >-
+          If ($env:Platform -Match "x86") {
+            $env:VCVARS_PLATFORM="x86"
+            $env:ENV_PLATFORM="x86"
+          } Else {
+            $env:VCVARS_PLATFORM="amd64"
+            $env:ENV_PLATFORM="x64"
+          }
+    - bash -c "./php-tools/install-php.sh"
+
+after_build:
+
+test_script:
+    - go test gitlab.com/sailenicolas/gophp -v
+
+on_finish:
+
+deploy:

@@ -77,10 +77,10 @@ docker-image:
 	   docker build --build-arg=PHP_VERSION="8.1.3" --build-arg=STATIC=$(STATIC)  \
 	   --build-arg=PHP_VERSION_INSTALL=php8.1 \
 	  -t $(DOCKER_IMAGE)8.1.3 -f "php-tools/Dockerfile" .
-	$Q docker image pull $(DOCKER_IMAGE)8.0.16 ||                \
-	   docker build --build-arg=PHP_VERSION="8.0.16" --build-arg=STATIC=$(STATIC)  \
+	$Q docker image pull $(DOCKER_IMAGE)8.0.17 ||                \
+	   docker build --build-arg=PHP_VERSION="8.0.17" --build-arg=STATIC=$(STATIC)  \
 	   --build-arg=PHP_VERSION_INSTALL=php8.0 \
-	  -t $(DOCKER_IMAGE)8.0.16 -f "php-tools/Dockerfile" .
+	  -t $(DOCKER_IMAGE)8.0.17 -f "php-tools/Dockerfile" .
 
 # Run Make target in Docker container. For instance, to run 'test', call as 'docker-test'.
 docker-%: docker-image

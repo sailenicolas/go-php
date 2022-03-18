@@ -2,7 +2,7 @@
   <configuration default="false" name="go test gitlab.com/sailenicolas/gophp" type="GoTestRunConfiguration" factoryName="Go Test" nameIsGenerated="true">
     <module name="gophp" />
     <working_directory value="$PROJECT_DIR$" />
-    <go_parameters value="-tags php8,Debian" />
+    <go_parameters value="-tags php8,Debian -v" />
     <useCustomBuildTags value="true" />
     <kind value="PACKAGE" />
     <package value="gitlab.com/sailenicolas/gophp" />

@@ -2,4 +2,4 @@
 // Use of this source code is governed by the MIT license that can be found in
 // the LICENSE file.
 
-#include "src/value.c"
+#include "include/gophp_object.c"

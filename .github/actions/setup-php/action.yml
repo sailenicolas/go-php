@@ -5,4 +5,4 @@ runs:
         - shell: bash
           run: |
               set -x
-              ./.github/scripts/install.sh
+              sudo ./.github/scripts/install.sh

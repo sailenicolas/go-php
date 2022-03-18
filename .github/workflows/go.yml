@@ -2,9 +2,9 @@ name: Go
 
 on:
     push:
-        branches: [ master ]
+        branches: [ php8, master ]
     pull_request:
-        branches: [ master ]
+        branches: [ master, php8 ]
 
 jobs:
 

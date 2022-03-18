@@ -33,7 +33,8 @@ build_script:
             $env:ENV_PLATFORM="x64"
           }
 
-    -  bash -c "sudo ./php-tools/install-php.sh"
+    -  bash -c "chmod +x ./php-tools/install-php.sh"
+    -  bash -c "./php-tools/install-php.sh"
 
 after_build:
 

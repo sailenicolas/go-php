@@ -29,7 +29,8 @@ if [ "${RELEASE_ID}" == "Debian" ]; then
 elif [ "${RELEASE_ID}" == "Ubuntu" ]; then
   LC_ALL=C.UTF-8 sudo add-apt-repository ppa:ondrej/php -y
 fi
-sudo apt-get update &&
-  export CFLAGS="${PHP_CFLAGS}" CPPFLAGS="${PHP_CPPFLAGS}" LDFLAGS="${PHP_LDFLAGS}"
+sudo apt-get update && sudo apt-get upgrade -y
+export CFLAGS="${PHP_CFLAGS}" CPPFLAGS="${PHP_CPPFLAGS}" LDFLAGS="${PHP_LDFLAGS}"
 sudo apt-get install -y --no-install-recommends ${PHP_PACKAGES}
 sudo ln -sT "/usr/include/php/$(ls /usr/include/php)" /usr/include/php/phpsrc
+sudo ls -la "/usr/include/php/phpsrc"

@@ -11,6 +11,7 @@ branches:
 # scripts that are called at very beginning, before repo cloning
 init:
     - git config --global core.autocrlf input
+    - rm -rf /usr/go/src/gitlab.com/${username}/${project}
 
 clone_folder: /usr/go/src/gitlab.com/${username}/${project}
 

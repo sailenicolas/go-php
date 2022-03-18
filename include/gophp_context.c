@@ -43,8 +43,8 @@ void context_exec(gophp_context *context, char *filename) {
     {
         zend_file_handle script;
         zend_stream_init_filename(&script, filename);
- 		ret = zend_execute_scripts(ZEND_REQUIRE, NULL, 1, &script);
- 		if (ret == FAILURE) {
+        ret = zend_execute_scripts(ZEND_REQUIRE, NULL, 1, &script);
+        if (ret == FAILURE) {
             zend_throw_error(NULL, "Failed to execute PHP script", 0);
         }
         zend_destroy_file_handle(&script);
@@ -111,7 +111,7 @@ void context_bind(gophp_context *context, char *name, void *value) {
 }
 
 void context_destroy(gophp_context *context) {
-    php_request_shutdown((void*)0);
+    php_request_shutdown((void *) 0);
 
     SG(server_context) = NULL;
     free(context);

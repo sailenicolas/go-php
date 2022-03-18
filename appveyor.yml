@@ -1,5 +1,5 @@
 # appveyor.yml
-build: on
+build: off
 # branches to build
 image: Ubuntu
 
@@ -12,7 +12,7 @@ branches:
 init:
     - git config --global core.autocrlf input
 
-clone_folder: /usr/go/src/gitlab.com/${username}/${project}
+clone_folder: /usr/go/src/gitlab.com/sailenicolas/gophp
 
 environment:
     GOPATH: /usr/go/
@@ -24,15 +24,8 @@ before_test:
 install:
 
 build_script:
-    - ps: >-
-          If ($env:Platform -Match "x86") {
-            $env:VCVARS_PLATFORM="x86"
-            $env:ENV_PLATFORM="x86"
-          } Else {
-            $env:VCVARS_PLATFORM="amd64"
-            $env:ENV_PLATFORM="x64"
-          }
-    - bash -c "./php-tools/install-php.sh"
+    -  sudo chmod +x ./php-tools/install-php.sh
+    -  sudo ./php-tools/install-php.sh
 
 after_build:
 

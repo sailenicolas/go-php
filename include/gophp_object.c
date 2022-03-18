@@ -12,7 +12,7 @@
 gophp_object *new_gophp_object() {
     gophp_object *val = malloc(sizeof(gophp_object));
     val->internal = malloc(sizeof(zval));
-	gophp_object_set_null(val);
+    gophp_object_set_null(val);
     errno = 0;
     return val;
 }
@@ -127,7 +127,7 @@ void gophp_object_set_zval(gophp_object *val, zval *src) {
                 kind = KIND_BOOL;
                 break;
             }
-			printf("%d\n", Z_TYPE_P(src));
+            printf("%d\n", Z_TYPE_P(src));
             errno = 1231313131;
             return;
     }

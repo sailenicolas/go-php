@@ -90,14 +90,6 @@ var receiverDefineTests = []struct {
 		"",
 	},
 	{
-		"$t = new TestReceiver; echo $t->Hello('World');",
-		"Hello World",
-	},
-	{
-		"$t = new TestReceiver; echo json_encode($t->Goodbye('Doge'));",
-		`["Goodbye","Doge"]`,
-	},
-	{
 		"$t = new TestReceiver; echo $t->invalid();",
 		"",
 	},

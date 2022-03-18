@@ -21,7 +21,6 @@ static zend_object_handlers receiver_handlers;
 
 // Call function with arguments passed and return value (if any).
 static int call_receiver_method(char *name, INTERNAL_FUNCTION_PARAMETERS) {
-  	     printf("call_receiver_method\n");
   zval args;
     array_init_size(&args, ZEND_NUM_ARGS());
     if (zend_copy_parameters_array(ZEND_NUM_ARGS(), &args) == FAILURE) {
@@ -42,7 +41,6 @@ static int call_receiver_method(char *name, INTERNAL_FUNCTION_PARAMETERS) {
 
 
 static zval *read_receiver_property(zend_object *object, zend_string *member, int type, void **cache_slot, zval *rv) {
-     printf("read_receiver_property\n");
    gophp_object *result = engineReceiverGet(object, ZSTR_VAL(member));;
     if (result == NULL) {
         ZVAL_NULL(rv);
@@ -55,13 +53,11 @@ static zval *read_receiver_property(zend_object *object, zend_string *member, in
 }
 
 static zval *write_receiver_property(zend_object *object, zend_string *member, zval *value, void **cache_slot) {
-    printf("write_receiver_property\n");
   engineReceiverSet(object, ZSTR_VAL(member), (void *) value);
     return value;
 }
 
 static int has_receiver_property(zend_object *object, zend_string *member, int has_set_exists, void **cache_slot) {
-  printf("has_receiver_property\n");
    if (!engineReceiverExists(object, ZSTR_VAL(member))) {
         // Value does not exist.
         return 0;
@@ -144,7 +140,6 @@ static void receiver_ctor_handler(INTERNAL_FUNCTION_PARAMETERS) {
 // function.
 //TODO: REVIEW THIS
 static zend_function *get_receiver_constructor(zend_object *object) {
-printf("constructor \n");
     zend_internal_function *func;
     if (EXPECTED(EG(trampoline).common.function_name == NULL)) {
         func = (zend_internal_function * ) & EG(trampoline);
@@ -237,8 +232,7 @@ return obj;
 
 
 void receiver_define(char *name) {
-    memcpy(&receiver_handlers, zend_get_std_object_handlers(),
-           sizeof(zend_object_handlers));
+    memcpy(&receiver_handlers, zend_get_std_object_handlers(), sizeof(zend_object_handlers));
     receiver_handlers.free_obj = free_receiver_obj;
     receiver_handlers.read_property = read_receiver_property;
     receiver_handlers.write_property = write_receiver_property;
@@ -253,11 +247,11 @@ void receiver_define(char *name) {
 	*class_entry = orig_class_entry;
 	class_entry->type = ZEND_INTERNAL_CLASS;
     zend_initialize_class_data(class_entry, 0);
-#if PHP_MINOR_VERSION == 1
-    zend_alloc_ce_cache(class_entry->name);
-#else
+	#if PHP_MINOR_VERSION == 1
+		zend_alloc_ce_cache(class_entry->name);
+	#else
 
-#endif
+	#endif
 	class_entry->info.internal.module = EG(current_module);
 
 		if (class_entry->info.internal.builtin_functions) {
@@ -273,8 +267,7 @@ void receiver_define(char *name) {
     zend_string_release_ex(lcname, 0);
 }
 void destroy_receiver(char *name) {
-	     printf("destroy_receiver\n");
-name = php_strtolower(name, strlen(name));
+	name = php_strtolower(name, strlen(name));
 	zval *val = zend_hash_str_find_ptr(EG(class_table), name, strlen(name)-1);
 	if (val != NULL) {
 		destroy_zend_class(val);

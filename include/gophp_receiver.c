@@ -20,13 +20,13 @@
 static zend_object_handlers receiver_handlers;
 
 // Call function with arguments passed and return value (if any).
-static int call_receiver_method(char *name, INTERNAL_FUNCTION_PARAMETERS) {
-  zval args;
+static int call_receiver_method(zend_string *name, INTERNAL_FUNCTION_PARAMETERS) {
+  	zval args;
     array_init_size(&args, ZEND_NUM_ARGS());
     if (zend_copy_parameters_array(ZEND_NUM_ARGS(), &args) == FAILURE) {
         RETVAL_NULL();
     } else {
-        gophp_object *result = engineReceiverCall(Z_OBJ_P(getThis()), name, (void *) &args);
+        gophp_object *result = engineReceiverCall(Z_OBJ_P(getThis()), ZSTR_VAL(name), (void *) &args);
         if (result == NULL) {
             RETVAL_NULL();
         } else {
@@ -86,6 +86,7 @@ static int has_receiver_property(zend_object *object, zend_string *member, int h
 
 static void receiver_method_handler(INTERNAL_FUNCTION_PARAMETERS) {
    /* Cleanup trampoline */
+	call_receiver_method(EX(func)->common.function_name, INTERNAL_FUNCTION_PARAM_PASSTHRU);
    ZEND_ASSERT(EX(func)->common.fn_flags & ZEND_ACC_CALL_VIA_TRAMPOLINE);
    zend_free_trampoline(EX(func));
    EX(func) = NULL;

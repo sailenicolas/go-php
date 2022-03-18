@@ -6,7 +6,7 @@
 
 This package implements support for executing PHP scripts, exporting Go variables for use in PHP contexts, attaching Go method receivers as PHP classes and returning PHP variables for use in Go contexts.
 
-Only PHP > 8.0 series are supported.
+PHP 8.1 series are supported. 
 
 ## Building
 
@@ -16,13 +16,12 @@ For most Linux systems, this can usually be found be installed using `install-ph
 
 Once the PHP library is available, the bindings can be compiled with `go build` and are `go get`-able.
 
-**Note**: Pull Request are welcome.
-**Note**: Building against PHP 8.1.3 requires that the `php8` tag is provided, i.e.:
+**Note**: `go mod vendor` does not work with CGO, see [Include cgo source files in go mod vendor #47894 ](https://github.com/golang/go/issues/47894):
 ```bash
-go get -tags php8 gitlab.com/sailenicolas/gophp
+go get gitlab.com/sailenicolas/gophp
 ```
 
-There is not a default build target.
+There is no tag because php8.1 only is supported. (It can work on php8.0 though)
 
 ## Status
 

@@ -11,7 +11,12 @@
   <component name="ChangeListManager">
     <list default="true" id="06e2f904-2223-4a6c-abae-951b75adff02" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/include/gophp_context.c" beforeDir="false" afterPath="$PROJECT_DIR$/include/gophp_context.c" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/include/gophp_object.c" beforeDir="false" afterPath="$PROJECT_DIR$/include/gophp_object.c" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/include/gophp_object.h" beforeDir="false" afterPath="$PROJECT_DIR$/include/gophp_object.h" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/include/gophp_receiver.c" beforeDir="false" afterPath="$PROJECT_DIR$/include/gophp_receiver.c" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/php-tools/install-php.sh" beforeDir="false" afterPath="$PROJECT_DIR$/php-tools/install-php.sh" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -126,6 +131,7 @@
       <option name="presentableId" value="Default" />
       <updated>1647264220546</updated>
       <workItem from="1647264222373" duration="796000" />
+      <workItem from="1647613017290" duration="4000" />
     </task>
     <servers />
   </component>

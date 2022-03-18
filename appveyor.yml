@@ -32,7 +32,7 @@ build_script:
             $env:VCVARS_PLATFORM="amd64"
             $env:ENV_PLATFORM="x64"
           }
-    - bash: -c "./php-tools/install-php.sh"
+    - bash -c "./php-tools/install-php.sh"
 
 after_build:
 
